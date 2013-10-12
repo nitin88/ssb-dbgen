@@ -389,17 +389,7 @@ tbl_open(int tbl, char *mode)
         }
     else{
 
-#ifdef LINUX
-      /* allow large files on Linux */
-      /*use open to first to get the in fd and apply regular fdopen*/
-
-	/*cheng: Betty mentioned about write mode problem here, added 066*/
-      retcode =
-		  open(fullpath, ((*mode == 'r')?O_RDONLY:O_WRONLY)|O_CREAT|O_LARGEFILE,0644);
-        f = fdopen(retcode, mode);
-#else
         f = fopen(fullpath, mode);
-#endif
 
     }
     OPEN_CHECK(f, fullpath);
