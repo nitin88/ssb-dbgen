@@ -376,10 +376,10 @@ tbl_open(int tbl, char *mode)
         }
     if (S_ISREG(fstats.st_mode) && !force && *mode != 'r' )
         {
-        sprintf(prompt, "Do you want to overwrite %s ?", fullpath);
+        /* sprintf(prompt, "Do you want to overwrite %s ?", fullpath);
         if (!yes_no(prompt))
             exit(0);
-        }
+        } */
 
     if (S_ISFIFO(fstats.st_mode))
         {
