@@ -1,0 +1,13 @@
+source ./mysql/q1_bench/q1.1.sql
+source ./mysql/q1_bench/q1.2.sql
+source ./mysql/q1_bench/q1.3.sql
+source ./mysql/q2_bench/q2.1.sql
+source ./mysql/q2_bench/q2.2.sql
+source ./mysql/q2_bench/q2.3.sql
+source ./mysql/q3_bench/q3.1.sql
+source ./mysql/q3_bench/q3.2.sql
+source ./mysql/q3_bench/q3.3.sql
+source ./mysql/q3_bench/q3.4.sql
+source ./mysql/q4_bench/q4.1.sql
+source ./mysql/q4_bench/q4.2.sql
+source ./mysql/q4_bench/q4.3.sql
