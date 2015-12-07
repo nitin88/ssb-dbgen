@@ -672,7 +672,7 @@ holiday holidays[]={
 
 char * month_names[]={"January","February","March","April",
                  "May","June","July","August",
-                 "September","Octorber","November","December"};
+                 "September","October","November","December"};
 
 char * weekday_names[]={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
 
