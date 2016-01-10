@@ -56,7 +56,7 @@ typedef struct
     long            partkey;
     long            suppkey;
     char            orderdate[DATE_LEN];
-    char            opriority[MAXAGG_LEN + 1];
+    char            opriority[O_PRIO_SD + 1];
     long            ship_priority;
     long             quantity;
     long           extended_price;
@@ -98,7 +98,8 @@ typedef struct
     long            custkey;
     int             totalprice;
     char            odate[DATE_LEN];
-    char            opriority[MAXAGG_LEN + 1];
+    char            opriority[O_PRIO_SD + 1];
+    //char            opriority[MAXAGG_LEN + 1];
     char            clerk[O_CLRK_LEN + 1];
     int             spriority;
     long            lines;

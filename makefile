@@ -9,12 +9,12 @@ CC      = gcc
 #                                  SGI, SUN, U2200, VMS, LINUX
 # Current values for WORKLOAD are:  SSBM, TPCH, TPCR
 DATABASE=DB2 
-MACHINE =MAC
+MACHINE =LINUX
 WORKLOAD =SSBM 
 #
 # add -EDTERABYTE if orderkey will execeed 32 bits (SF >= 300)
 # and make the appropriate change in gen_schema() of runit.sh
-CFLAGS	= -O -DDBNAME=\"dss\" -D$(MACHINE) -D$(DATABASE) -D$(WORKLOAD)
+CFLAGS	= -g -O -DDBNAME=\"dss\" -D$(MACHINE) -D$(DATABASE) -D$(WORKLOAD)
 LDFLAGS = -O
 # The OBJ,EXE and LIB macros will need to be changed for compilation under
 #  Windows NT

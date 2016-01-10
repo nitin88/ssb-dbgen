@@ -255,7 +255,7 @@ mk_order(long index, order_t *o, long upd_num)
 		RANDOM(o->lineorders[lcnt].tax, L_TAX_MIN, L_TAX_MAX, L_TAX_SD);
 
 		strcpy(o->lineorders[lcnt].orderdate,o->odate);
-
+		//printf("l1 :%d, l2: %d\n",sizeof(o->lineorders[lcnt].opriority), sizeof(o->opriority));
 		strcpy(o->lineorders[lcnt].opriority,o->opriority);
 		o->lineorders[lcnt].ship_priority = o->spriority;
 
