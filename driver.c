@@ -611,19 +611,11 @@ partial (int tbl, int s)
 	
 	rowcnt = set_state(tbl, scale, children, s, &extra);
         
-
-#ifdef SSBM
-        if (s > 1 && tbl == DATE) {
-#else
-	if (s > 1 && (tbl == NATION || tbl == REGION)) {
-#endif 
-
 	if (s == children)
 		gen_tbl (tbl, rowcnt * (s - 1) + 1, rowcnt + extra, upd_num);
 	else
 		gen_tbl (tbl, rowcnt * (s - 1) + 1, rowcnt, upd_num);
 	
-        }
 	if (verbose > 0)
 		fprintf (stderr, "done.\n");
 	
@@ -724,6 +716,11 @@ process_options (int count, char **vector)
 			break;
 	  case 'S':				/* generate a particular STEP */
 		  step = atoi (optarg);
+#ifdef SSBM
+		  if (step > 1) { 
+			  table &= ~(1 << DATE); 
+		  }
+#endif
 		  break;
 	  case 'v':				/* life noises enabled */
 		  verbose = 1;
@@ -754,7 +751,9 @@ process_options (int count, char **vector)
 		          table = 1 << CUST;
 			  table |= 1 << PART;
 			  table |= 1 << SUPP;
-			  table |= 1 << DATE;
+			  if (step == 1) {
+			     table |= 1 << DATE;
+			  }
 			  table |= 1 << LINE;
 			  break;
 #else
