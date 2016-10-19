@@ -221,7 +221,7 @@ tdef tdefs[] =
 {
    
     	{"part.tbl", "part table", 200000, hd_part,
-		{pr_part, ld_part}, sd_part, vrf_part, PSUPP, 0},
+		{pr_part, ld_part}, sd_part, vrf_part, NONE, 0},
 	{0,0,0,0,{0,0}, 0,0,0,0},
 	{"supplier.tbl", "suppliers table", 2000, hd_supp,
 	        {pr_supp, ld_supp}, sd_supp, vrf_supp, NONE, 0},
@@ -610,12 +610,20 @@ partial (int tbl, int s)
 		set_files (tbl, s);
 	
 	rowcnt = set_state(tbl, scale, children, s, &extra);
+        
+
+#ifdef SSBM
+        if (s > 1 && tbl == DATE) {
+#else
+	if (s > 1 && (tbl == NATION || tbl == REGION)) {
+#endif 
 
 	if (s == children)
 		gen_tbl (tbl, rowcnt * (s - 1) + 1, rowcnt + extra, upd_num);
 	else
 		gen_tbl (tbl, rowcnt * (s - 1) + 1, rowcnt, upd_num);
 	
+        }
 	if (verbose > 0)
 		fprintf (stderr, "done.\n");
 	
