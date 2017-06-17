@@ -671,8 +671,8 @@ holiday holidays[]={
 };
 
 char * month_names[]={"January","February","March","April",
-                 "May","June","July","Augest",
-                 "September","Octorber","November","December"};
+                 "May","June","July","August",
+                 "September","October","November","December"};
 
 char * weekday_names[]={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
 
@@ -715,9 +715,9 @@ mk_date(long index,date_t *d)
     d->lastdayinweekfl[1]='\0';
 
     if(is_last_day_in_month(d->year,d->monthnuminyear,d->daynuminmonth)==1){
-	d->lastdayinmonthfl[0]= '0';
-    }else{
 	d->lastdayinmonthfl[0]= '1';
+    }else{
+	d->lastdayinmonthfl[0]= '0';
     }
     d->lastdayinmonthfl[1]='\0';
  
