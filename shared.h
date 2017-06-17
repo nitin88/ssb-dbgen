@@ -117,8 +117,7 @@
 #define  PHONE_LEN     15
 
 #ifdef SSBM
-#define  MAXAGG_LEN    20    /* max component length for a agg str */
-
+#define  MAXAGG_LEN    15    /* max component length for agg str; longest string is "4-NOT SPECIFIED" */
 #else
 #define  MAXAGG_LEN    20    /* max component length for a agg str */
 
