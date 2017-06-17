@@ -98,29 +98,30 @@ dbg_print(int format, FILE *target, void *data, int len, int sep)
 #endif /* MVS */
 	case DT_INT:
 		if (columnar)
-			fprintf(target, "%12ld", (long)data);
+			fprintf(target, "%12ld", *(long *)data);
 		else
-			fprintf(target, "%ld", (long)data);
+			fprintf(target, "%ld", *(long *)data);
 		break;
 	case DT_HUGE:
 #ifndef SUPPORT_64BITS
-        if (*(long *)((long *)data + 1) == 0) \
+		/* Note: Next block seems to assume little-endian memory order */
+        if (*((long *)data + 1) == 0) \
            if (columnar) fprintf(target, "%12ld", *(long *)data);
            else fprintf(target, "%ld", *(long *)data);
         else
            if (columnar) fprintf(target, "%5ld%07ld", 
-				*(long *)((long *)data + 1), *(long *)data);
+				*((long *)data + 1), *(long *)data);
            else fprintf(target,"%ld%07ld", 
-				*(long *)((long *)data + 1), *(long *)data);
+				*((long *)data + 1), *(long *)data);
 #else
 		fprintf(target, HUGE_FORMAT, *(DSS_HUGE *)data);
 #endif /* SUPPORT_64BITS */
 		break;
 	case DT_KEY:
-		fprintf(target, "%ld", (long)data);
+		fprintf(target, "%ld", *(long *)data);
 		break;
 	case DT_MONEY:
-		cents = (long)data;
+		cents = *(long *)data;
 		if (cents < 0)
 			{
 			fprintf(target, "-");
@@ -135,9 +136,9 @@ dbg_print(int format, FILE *target, void *data, int len, int sep)
 		break;
 	case DT_CHR:
 		if (columnar)
-			fprintf(target, "%c ", (char)data);
+			fprintf(target, "%c ", *(char *)data);
 		else
-			fprintf(target, "%c", (char)data);
+			fprintf(target, "%c", *(char *)data);
 		break;
 	}
 
