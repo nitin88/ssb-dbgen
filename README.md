@@ -1,18 +1,28 @@
-This repository holds the data generation utility for the [Star Schema Benchmark](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF) (SSB) for DBMS analytics. It generates schema data as table files, in a simple textual format, which can then be loaded into a DBMS for running the benchmark.
+This repository holds the data generation utility for the Star Schema Benchmark (SSB) for DBMS analytics. It generates schema data as table files, in a simple textual format, which can then be loaded into a DBMS for running the benchmark.
 
 | Table of contents|
 |:----------------|
-| ["What? _Another_ fork of `ssb-dbgen`? Why?"](#another-fork)<br>  [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Caveat: Avoid known breakage!](#caveat)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>|
+| ["What? _Another_ fork of `ssb-dbgen`? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Caveat: Avoid known breakage!](#caveat)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>|
 
 ## <a name="another-fork">"What? _Another_ fork of ssb-dbgen? Why?"</a>
 
-The `ssb-dbgen` utility is based on the [TPC-H benchmark](http://tpc.org/tpch/)'s data generation utility, also named `dbgen` (as the Star Schema Benchmark itself is base on TPC-H). While the latter is pretty stable and gets updated if bugs or build issues are found, that is not true of the former. The SSB does not have an official website; and the original code of its own `dbgen` was forked from an older version of TPC-H `dbgen`, and not maintained by the benchmark's creators since its release.
+The `ssb-dbgen` utility is based on the [TPC-H benchmark](http://tpc.org/tpch/)'s data generation utility, also named `dbgen`. While the latter is pretty stable and gets updated if bugs or build issues are found, that is not true of the former. The SSB does not have an official website; and the original code of its own `dbgen` was forked from an older version of TPC-H `dbgen`, and not maintained by the benchmark's creators since its release.
 
 The result has been several repositories here on github with various changes to the code, intended to resolve this or the other issue with compilation or execution, occasionally adding new files (such as scripts for loading the data into a DBMS, generating compressed data files, removing the trailing pipe characters etc.). The result is a tree of mostly unsynchronized repositories - with most having been essentially abandoned: Last commits several years ago with more than a couple of issues unresolved.
 
 This is an attempt to **unify** all the repositories, taking all changes to the code which - to my opinion - are generally applicable, and applying them altogether while resolving any conflicts. Details of what's already been done can be found on the [Closed Issues Page](https://github.com/eyalroz/ssb-dbgen/issues?q=is%3Aissue+is%3Aclosed) and of course by examining the commit comments.
 
 If you are the author of one of the other repositories - please [contact me](mailto:eyalroz@technion.ac.il) for better coordination of this effort.
+
+## <a name="about-ssb">About the Star Schema Benchmark</a>
+
+The Star Schema Benchmark is a modification of the [TPC-H benchmark](http://tpc.org/tpch/), which is the Transaction Processing Council's (older) benchmark for evaluating the performance of Database Management Systems (DBMSes) on analytic queries - that is, queries which do not modify the data.
+
+The TPC-H has various known issues and deficiencies which are beyond the scope of this document. Researchers [Patrick O'Neil](http://www.cs.umb.edu/~poneil/), [Betty O'Neil](http://www.cs.umb.edu/~eoneil/) and [Xuedong Chen](https://www.linkedin.com/in/xuedong-chen-18414ba/), from the University of Massachusats Boston, proposed a modification of the TPC-H benchmark which addresses some of these shortcomings, in several papers, the latest and most relevant being [Star Schema Benchmark, Revision 3](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF) published June 2009. One of the key features of the modifcation is the conversion of the [TPC-H schemata](http://kejser.org/wp-content/uploads/2014/06/image_thumb2.png) to Star Schemata ("Star Schema" is a misnomer), by some denormalizing as well as dropping some of the data; more details appear <a href="#difference-from-tpch">below</a> and even more details in the paper itself.
+
+The benchmark was also accompanied by the initial versions of the code in this repository - a modified utility to generate schema data on which to run the benchmark.
+
+For a recent discussion of the benchmark, you may wish to also read [A Review of Star Schema Benchmark](https://arxiv.org/pdf/1606.00295.pdf), by Jimi Sanchez.
 
 ## <a name="building">Building the generation utility</a>
 
