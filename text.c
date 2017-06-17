@@ -286,7 +286,7 @@ dbg_text(char *tgt, int min, int max, int sd)
 #ifdef TEST
 tdef tdefs = { NULL };
 
-main()
+int main()
 {
 	char prattle[401];
 	

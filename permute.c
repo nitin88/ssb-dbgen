@@ -126,7 +126,7 @@ permute_dist(distribution *d, long stream)
 
 #ifdef TEST
 
-main(int ac, char *av[])
+int main(int ac, char *av[])
 	{
 	long *sequence, 
 		i,
