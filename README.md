@@ -2,7 +2,7 @@ This repository holds the data generation utility for the Star Schema Benchmark 
 
 | Table of contents|
 |:----------------|
-| ["What? _Another_ fork of `ssb-dbgen`? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Caveat: Avoid known breakage!](#caveat)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>|
+| ["What? _Another_ fork of ssb-dbgen? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Caveat: Avoid known breakage!](#caveat)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>|
 
 ## <a name="another-fork">"What? _Another_ fork of ssb-dbgen? Why?"</a>
 
