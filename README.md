@@ -1,103 +1,111 @@
-Star Schema Benchmark data generator
-==
+This repository holds the data generation utility for the [Star Schema Benchmark](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF) (SSB) for DBMS analytics. It generates schema data as table files, in a simple textual format, which can then be loaded into a DBMS for running the benchmark.
 
-This branch has been updated to fix building of the utility on Linux.
+| Table of contents|
+|:----------------|
+| ["What? _Another_ fork of `ssb-dbgen`? Why?"](#another-fork)<br>  [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Caveat: Avoid known breakage!](#caveat)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>|
 
-Original problems with the utility remain, such as crashes.  
-Generate each table individually:
-* ./dbgen -s 10 -T s 
-* ./dbgen -s 10 -T d
-* ./dbgen -s 10 -T p 
-* ./dbgen -s 10 -T c
-* ./dbgen -s 10 -T l
+## <a name="another-fork">"What? _Another_ fork of ssb-dbgen? Why?"</a>
 
-Original Readme
---
-Note: In ~~our research paper we~~~ the original paper the authors use the SSB instead of SSBM
-Version of 2/28/10: 
-Cardinality of supplier fixed to follow benchmark spec: now 2000*SF
- (previously was 10000*SF, in error): line 226, driver.c
-Type of time value changed from long to time_t (now 64 bits on Windows):
- line 688, build.c
-Building in Visual Studio 2008:
-  Use Win32 console project, not using precompiled headers,
-  in Properties>C/C++>CommandLine, additional options:
-   /D "SSBM" /D "DBNAME" /D "DB2"   (for DB2)
-Building using makefile_win:  set for DB2 build:
-  nmake -f makefile_win
-  (Change DATABASE symbol for other database)
+The `ssb-dbgen` utility is based on the [TPC-H benchmark](http://tpc.org/tpch/)'s data generation utility, also named `dbgen` (as the Star Schema Benchmark itself is base on TPC-H). While the latter is pretty stable and gets updated if bugs or build issues are found, that is not true of the former. The SSB does not have an official website; and the original code of its own `dbgen` was forked from an older version of TPC-H `dbgen`, and not maintained by the benchmark's creators since its release.
 
-SSBM dbgen readme:
+The result has been several repositories here on github with various changes to the code, intended to resolve this or the other issue with compilation or execution, occasionally adding new files (such as scripts for loading the data into a DBMS, generating compressed data files, removing the trailing pipe characters etc.). The result is a tree of mostly unsynchronized repositories - with most having been essentially abandoned: Last commits several years ago with more than a couple of issues unresolved.
 
-SSBM is based on TPC-H dbgen source. The coding style and architecture
-follows the TPCH dbgen. The original TPCH dbgen code stays untouched and
-all new code related to SSBM dbgen follow the "#ifdef SSBM" statements.
+This is an attempt to **unify** all the repositories, taking all changes to the code which - to my opinion - are generally applicable, and applying them altogether while resolving any conflicts. Details of what's already been done can be found on the [Closed Issues Page](https://github.com/eyalroz/ssb-dbgen/issues?q=is%3Aissue+is%3Aclosed) and of course by examining the commit comments.
 
-For original detailed TPC-H documentation, please refer TPCH_README 
-document under the same directory. Here we just list few things that 
-are specific to SSBM.
+If you are the author of one of the other repositories - please [contact me](mailto:eyalroz@technion.ac.il) for better coordination of this effort.
 
-  
-1. How is SSBM DBGEN built?
+## <a name="building">Building the generation utility</a>
 
-Same idea as TPCH dbgen setup, which requires user to create an 
-appropriate makefile, using makefile.suite as a basis. Make sure to
-use "SSBM" for the workload variable. 
+The build process is not completely automated, unfortunately (an inheritance from the TPC-H dbgen utility), and comprises of two phases: Semi-manually generating a [Makefile](https://en.wikipedia.org/wiki/Makefile), then an automated build using that Makefile.
 
-Type "make" to compile and to generate the SSBM dbgen executable. 
-Please refer to Porting.Notes for more details and for
-suggested compile time options.
+#### Generating a Makefile
 
-Note: If you want to generate the data files to a diffent directory, you should
-copy the dbgen executable as well as the dists.dss file to that directory.
- 
-2. How to generate SSBM data files?
-To generate the dimension tables:
+Luckily, the Makefile is all-but-written for you, in the form of a template, [`makefile.suite`](https://github.com/eyalroz/ssb-dbgen/blob/master/makefile.suite). What remains for you to do is (assuming a non-Windows system):
 
-(customer.tbl)
-dbgen -s 1 -T c
+1. Copy `makefile.suite` to `Makefile`
+2. Set the values of the variables `DATABASE`, `MACHINE`, `WORKLOAD` and `CC`:
 
-(part.tbl)
-dbgen -s 1 -T p
+|Variable   |How to set it?   | List of options |
+|-----------|-----------------|-----------------|
+| `DATABASE`  | Use `DB2` if you can't tell what you should use; try one of the other options if that's the DBMS you're going to benchmark with  | `INFORMIX`, `DB2`, `TDAT`, `SQLSERVER`, `SYBASE` |
+| `MACHINE`  | According to the platform/operating system you're using  | `ATT`, `DOS`, `HP`, `IBM`, `ICL`, `MVS`, `SGI`, `SUN`, `U2200`, `VMS`, `LINUX`, `MAC` |
+| `WORKLOAD`  | Use `SSBM`   | `SSBM`, `TPCH`, `TPCR` (but better not try the last two)
+| `CC`  |  Use the base name of your system's C compiler (assuming it's in the search path)  | N/A |
 
-(supplier.tbl)
-dbgen -s 1 -T s
+<!--2. Set the value of the  variable to `DB2` - or, if you know what you're doing and you have a specific reason to do so, to one of the other databases in the commented list of possibilities.
+3. Set `MACHINE` to the value closest to your platform (mostly commonly it's either `LINUX`, or `MAC`; Windows users - see note below)
+4. Set `WORKLOAD` to `SSBM` (theoretically, `TPCH` might also work and generate TPC-H data, but don't count on it)
+5. Set your C compiler invocation string - either the base name if it's on your search path (e.g. `CC=gcc`) or a full pathname otherwise. -->
 
-(date.tbl)
-dbgen -s 1 -T d
 
-(fact table lineorder.tbl)
-dbgen -s 1 -T l
+**Notes:** Windows users should, instead of the above, copy `makefile_win` to `makefile`, and edit its contents - specifically, the compiler-related file paths at its beginning.
 
-(for all SSBM tables)
-dbgen -s 1 -T a
+#### Building using the Makefile
 
-To generate the refresh (insert/delete) data set:
-(create delete.[1-4] and lineorder.tbl.u[1-4] with refreshing fact 0.05%)
-dbgen -s 1 -r 5 -U 4
+Your system should have the following software:
 
-   where "-r 5" specifies refreshin fact n/10000
-         "-U 4" specifies 4 segments for deletes and inserts
-  
-At this moment there is no QGEN for SSBM. So
-the command line options related to those features won't apply.
+* GNU Make (which is standard on essentially all Unix-like systems today, specifically on Linux distributions), or Microsoft's NMake (which comes bundled with MS Visual Studio).
+* A C language compiler (C99/C2011 support is not necessary) and linker. GNU's compiler collection (gcc) is know to work on Linux; and MSVC probably works on Windows. clang, ICC or others should be ok as well.
 
-3. What are the changes upon TPC-H dbgen
+Now, simply execute `make -C /path/to/your/ssb-dbgen`; on Windows, you will need to be in the repository's directory and execute `nmake`. If you're in a terminal/command prompt session, the output should have several lines looking something like this:
+```
+gcc -O -DDBNAME=\"dss\" -DLINUX -DDB2  -DSSBM    -c -o bm_utils.o bm_utils.c
+```
+and finally, the executable files `dbgen` and `qgen` (or `dbgen.exe` and `qgen.exe` on Windows) should now appear in the source folder.
 
-changes made upon original TPC-H dbgen
+## <a name="using">Using the utility to generate data</a>
 
-1. removed snowflake tables such as nation and region (done)
-2. removed the partsupply table (done)
-3. removed the order table (done)
-4. renamed the fact table as Lineorder and added/removed many fields
-( done)
-5. added the date dimension table (done)
-6. adding and removing fields in dimension tables (done)
-7. have data cross reference for supplycost, revenue in lineorder (done)
-8. apply the refreshing only to lineorder table (done)
+The `dbgen` utility should be run from within the source folder (it can be run from elsewhere but you would need to copy the `dists.dss` file at least). Invoke it specifying a table you wish to create; do not create all tables at once (see below for the reason). Typically you would also want to specify the size scale factor. Thus:
 
-The command line option keeps the same as TPC-H dbgen (The -T options
-are changed to reflect different set of tables)
+    $ ./dbgen -v -s 10 -T c
+    
+will create the CUSTOMER table file, `customer.tbl`, in the current directory, with a scale factor of 10, i.e. 300,000 customer lines. Here are the first few lines of the resulting file:
+```
+1|Customer#000000001|j5JsirBM9P|MOROCCO  0|MOROCCO|AFRICA|25-989-741-2988|BUILDING|
+2|Customer#000000002|487LW1dovn6Q4dMVym|JORDAN   1|JORDAN|MIDDLE EAST|23-768-687-3665|AUTOMOBILE|
+3|Customer#000000003|fkRGN8n|ARGENTINA7|ARGENTINA|AMERICA|11-719-748-3364|AUTOMOBILE|
+4|Customer#000000004|4u58h f|EGYPT    4|EGYPT|MIDDLE EAST|14-128-190-5944|MACHINERY|
+```
+the fields are separated by a pipe character (`|`), and there's a trailing pipe at the end of the line. 
 
-===================== End of README ========================================
+After generating `.tbl` files for the CUSTOMER, PART, SUPPLIER, DATE and LINEORDER tables, you should now either load them directly into your DBMS, or apply some textual processing on them.
+
+**Note:** On Unix-like systems, it is also possible to write the generated data into a FIFO filesystem node, reading from the other side with a compression utility, so as to only write compressed data to disk. This may be useful of disk space is limited and you are using a particularly high scale factor.
+
+## <a name="caveat">Caveat: Avoid known breakage!</a>
+
+The dbgen utility has several fundamental issues which the creators did not address or avoid. The maintainer of this repository, as well as developers who maintained other forks of the original ssb-dbgen code, have not gone deep into the code to make fundamental changes addressing them, limiting ourselves to minor issues which can be resolved with simple cosmetic changes - avoiding the risk of affecting the output distributions or harming the functionality in any other way.
+
+Thus:
+
+* You must generate the data of each table *separately*:
+
+      ./dbgen -T s 
+      ./dbgen -T d
+      ./dbgen -T p 
+      ./dbgen -T c
+      ./dbgen -T l
+      
+  (you would of course add other relevant command-line parameters to all invocations of the utility, e.g. the scale factor.)
+
+* The `qgen` utility may or may not be working at all; and at any rate - it does not have any query files in the repository to operate on.
+
+Have you encountered some other issue with `dbgen`? Please open a new issue on the [Issues Page](https://github.com/eyalroz/ssb-dbgen/issues); be sure to list exactly what you did and enter a copy of the terminal output of the commands you used.
+
+## <a name="difference-from-tpch">Differences of the generated data from the TPC-H schema</a>
+
+For a detailed description of the differences betwen SSB data and its distributions, as well as motivation for the differences, please read the SSB's epoynmous [paper](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF).
+
+In a nutshell, the differences are as follows:
+
+1. Removed: Snowflake tables such as NATION and REGION
+2. Removed: The PARTSUPP table
+3. Denormalized/Removed: The ORDER table - data is denormaized into LINEORDER.
+4. Expanded/Modified/Renamed: The fact table LINEITEM is now LINEORDER; many of its fields have been added/removed, including fields denormalized from the ORDER table.
+5. Added: A DATE dimension table
+6. Modified: Removed and added fields in existing dimension tables (e.g. SUPPLIER)
+7. LINEORDER now has data cross-reference for supplycost and revenue 
+
+Also, refreshing is only applied to LINEORDER.
+
 
