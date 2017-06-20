@@ -248,8 +248,8 @@ pr_line(order_t *o, int mode)
     static FILE *fp_l = NULL;
     static int last_mode = 0;
     long      i;
-    int days;
-    char buf[100];
+    /* int days; */
+    /* char buf[100]; */
 
     if (fp_l == NULL || mode != last_mode)
         {

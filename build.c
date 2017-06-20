@@ -46,7 +46,7 @@ dbg_text(tgt, (int)(avg * V_STR_LOW),(int)(avg * V_STR_HGH), sd)
 static void gen_phone PROTO((long ind, char *target, long seed));
 
 #ifdef SSBM
-static void gen_category PROTO((char *target, long seed));
+/* static void gen_category PROTO((char *target, long seed)); */
 int gen_city PROTO((char *cityName, char *nationName));
 int gen_season PROTO((char * dest,int month,int day));
 int is_last_day_in_month PROTO((int year,int month,int day));
@@ -85,6 +85,7 @@ gen_phone(long ind, char *target, long seed)
     return;
 }
 
+/*
 static void
 gen_category(char *target, long seed){
   long num1,num2;
@@ -95,6 +96,7 @@ gen_category(char *target, long seed){
   sprintf(target + 5, "%01ld", num2);
   return;
 } 
+*/
 
 #ifdef SSBM
 long mk_cust(long n_cust, customer_t *c)
@@ -208,13 +210,13 @@ mk_order(long index, order_t *o, long upd_num)
 	{
 	long      lcnt;
 	long      rprice;
-	long      ocnt;
+	/* long      ocnt; */
 	long      tmp_date;
 	long      c_date;
 	long      clk_num;
-	long      supp_num;
+	/* long      supp_num; */
 	static char **asc_date = NULL;
-	char tmp_str[2];
+	/* char tmp_str[2]; */
 	char **mk_ascdate PROTO((void));
 	int delta = 1;
 
@@ -238,7 +240,7 @@ mk_order(long index, order_t *o, long upd_num)
 	o->spriority = 0;
 	
 	o->totalprice = 0;
-	ocnt = 0;
+	/* ocnt = 0; */
 	
 	RANDOM(o->lines, O_LCNT_MIN, O_LCNT_MAX, O_LCNT_SD);
 	for (lcnt = 0; lcnt < o->lines; lcnt++)
@@ -468,11 +470,11 @@ mk_part(long index, part_t *p)
 long
 mk_supp(long index, supplier_t *s)
 {
-	long     i,
-		bad_press,
-		noise,
-		offset,
-		type;
+	long i;
+	/* long bad_press; */
+	/* long noise; */
+	/* long offset; */
+	/* long type; */
         s->suppkey = index;
 	sprintf(s->name, S_NAME_FMT, S_NAME_TAG, index); 
 	s->alen = V_STR(S_ADDR_LEN, S_ADDR_SD, s->address);
@@ -599,7 +601,7 @@ mk_time(long index, dss_time_t *t)
 int gen_city(char *cityName, char *nationName){
     int i=0;
     long randomPick;
-	int clen = strlen(cityName);
+	/* int clen = strlen(cityName); */
 	int nlen = strlen(nationName);
 
     strncpy(cityName,nationName,CITY_FIX-1);

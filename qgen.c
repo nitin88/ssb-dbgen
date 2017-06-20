@@ -404,7 +404,9 @@ int main(int ac, char **av)
     if (!(flags & DFLT))        /* perturb the RNG */
 	    {
 	    if (!(flags & SEED))
-                rndm = (long)((unsigned)time(NULL) * DSS_PROC);
+            {
+            rndm = (long)((unsigned)time(NULL) * DSS_PROC);
+            }
 		if (rndm < 0)
 			rndm += 2147483647;
 		Seed[0].value = rndm;

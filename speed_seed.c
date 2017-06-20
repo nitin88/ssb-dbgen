@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "dss.h"
+#include "life_noise.h"
 
 /*  _tal long RandSeed = "Random^SeedFromTimestamp" (void); */
 

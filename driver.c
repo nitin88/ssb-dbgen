@@ -55,6 +55,7 @@
 #include "dss.h"
 #include "dsstypes.h"
 #include "bcd2.h"
+#include "life_noise.h"
 
 /*
 * Function prototypes
@@ -425,6 +426,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 			mk_order (i, &o, upd_num % 10000);
 
 		  if (insert_segments  && (upd_num > 0))
+            {
 			if((upd_num / 10000) < residual_rows)
 				{
 				if((++rows_this_segment) > rows_per_segment) 
@@ -443,26 +445,33 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 				}
 
 			if (set_seeds == 0)
+				{
 				if (validate)
 					tdefs[tnum].verify(&o, 0);
 				else
 					tdefs[tnum].loader[direct] (&o, upd_num);
+				}
+            }
 			break;
 		case SUPP:
 			mk_supp (i, &supp);
 			if (set_seeds == 0)
+				{
 				if (validate)
 					tdefs[tnum].verify(&supp, 0);
 				else
 					tdefs[tnum].loader[direct] (&supp, upd_num);
+				}
 			break;
 		case CUST:
 			mk_cust (i, &cust);
 			if (set_seeds == 0)
+				{
 				if (validate)
 					tdefs[tnum].verify(&cust, 0);
 				else
 					tdefs[tnum].loader[direct] (&cust, upd_num);
+				}
 			break;
 #ifdef SSBM
 		case PART:
@@ -473,19 +482,23 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 #endif 
 			mk_part (i, &part);
 			if (set_seeds == 0)
+				{
 				if (validate)
 					tdefs[tnum].verify(&part, 0);
 				else
 					tdefs[tnum].loader[direct] (&part, upd_num);
+				}
 			break;
 #ifdef SSBM
 		case DATE:
 			mk_date (i, &dt);
 			if (set_seeds == 0)
+				{
 				if (validate)
 					tdefs[tnum].verify(&dt, 0);
 				else
 					tdefs[tnum].loader[direct] (&dt, 0);
+				}
 			break;
 #else
 		case NATION:

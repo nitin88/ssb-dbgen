@@ -52,6 +52,7 @@ row_stop(int t)	\
 		t = PART;
 	
 	for (i=0; i <= MAX_STREAM; i++)
+		{
 		if ((Seed[i].table == t) || (Seed[i].table == tdefs[t].child))
 			{ 
 			if (set_seeds && (Seed[i].usage > Seed[i].boundary))
@@ -65,7 +66,8 @@ row_stop(int t)	\
 				NthElement((Seed[i].boundary - Seed[i].usage), &Seed[i].value);
 				}
 			} 
-		return;
+		}
+	return;
 	}
 
 void

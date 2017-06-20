@@ -360,7 +360,7 @@ long      weight,
 FILE     *
 tbl_open(int tbl, char *mode)
 {
-    char      prompt[256];
+    /* char      prompt[256]; */
     char      fullpath[256];
     FILE     *f;
     struct stat fstats;
@@ -434,11 +434,16 @@ long
 dssncasecmp(char *s1, char *s2, int n)
 {
     for (; n > 0; ++s1, ++s2, --n)
+        {
         if (tolower(*s1) != tolower(*s2))
             return ((tolower(*s1) < tolower(*s2)) ? -1 : 1);
-        else if (*s1 == '\0')
-            return (0);
-        return (0);
+        else
+            {
+            if (*s1 == '\0')
+                return (0);
+            }
+        }
+    return (0);
 }
 
 long
@@ -548,7 +553,9 @@ set_state(int table, long sf, long procs, long step, long *extra_rows)
 	long rowcount, remainder, result;
 	
     if (sf == 0 || step == 0)
+        {
         return(0);
+        }
 
 	rowcount = tdefs[table].base / procs;
 	if ((sf / procs) > (int)MAX_32B_SCALE)

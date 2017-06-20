@@ -14,7 +14,7 @@ WORKLOAD =
 #
 # add -EDTERABYTE if orderkey will execeed 32 bits (SF >= 300)
 # and make the appropriate change in gen_schema() of runit.sh
-CFLAGS	= -O -DDBNAME=\"dss\" -D$(MACHINE) -D$(DATABASE) -D$(WORKLOAD)
+CFLAGS	= -Wall -O -DDBNAME=\"dss\" -D$(MACHINE) -D$(DATABASE) -D$(WORKLOAD)
 LDFLAGS = -O
 # The OBJ,EXE and LIB macros will need to be changed for compilation under
 #  Windows NT
@@ -30,7 +30,7 @@ PROG1 = dbgen$(EXE)
 PROG2 = qgen$(EXE)
 PROGS = $(PROG1) $(PROG2)
 #
-HDR1 = dss.h rnd.h config.h dsstypes.h shared.h bcd2.h
+HDR1 = dss.h life_noise.h rnd.h config.h dsstypes.h shared.h bcd2.h
 HDR2 = tpcd.h permute.h
 HDR  = $(HDR1) $(HDR2)
 #
