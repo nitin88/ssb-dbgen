@@ -1,6 +1,11 @@
 *.o
 *.tbl
+*.bkp
+*.swp
 qgen
 dbgen
 Makefile
 makefile
+*~
+\#\#*
+gmon.out
