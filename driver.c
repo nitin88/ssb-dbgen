@@ -1115,7 +1115,7 @@ main (int ac, char **av)
 					}
 #endif
 					if (verbose > 0)
-						fprintf (stderr, "%s data for %s [pid: %d]",
+						fprintf (stderr, "%s data for %s [pid: %d]: ",
 						(validate)?"Validating":"Generating", tdefs[i].comment, DSS_PROC);
 					gen_tbl (i, minrow, rowcnt, upd_num);
 					if (verbose > 0)
