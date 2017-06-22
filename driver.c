@@ -426,7 +426,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 			mk_order (i, &o, upd_num % 10000);
 
 		  if (insert_segments  && (upd_num > 0))
-            {
+                        {
 			if((upd_num / 10000) < residual_rows)
 				{
 				if((++rows_this_segment) > rows_per_segment) 
@@ -443,6 +443,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 					upd_num += 10000;
 					}
 				}
+                        }
 
 			if (set_seeds == 0)
 				{
@@ -451,7 +452,6 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 				else
 					tdefs[tnum].loader[direct] (&o, upd_num);
 				}
-            }
 			break;
 		case SUPP:
 			mk_supp (i, &supp);
