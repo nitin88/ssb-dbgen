@@ -1,70 +1,76 @@
--- Sccsid:     @(#)dss.ddl	2.1.8.1
-CREATE TABLE TPCD.NATION  ( N_NATIONKEY  INTEGER NOT NULL,
-                            N_NAME       CHAR(25) NOT NULL,
-                            N_REGIONKEY  INTEGER NOT NULL,
-                            N_COMMENT    VARCHAR(152));
+CREATE TABLE part 
+(
+  p_partkey     INTEGER NOT NULL,
+  p_name        VARCHAR(22) NOT NULL,
+  p_mfgr        VARCHAR(6),
+  p_category    VARCHAR(7) NOT NULL,
+  p_brand1      VARCHAR(9) NOT NULL,
+  p_color       VARCHAR(11) NOT NULL,
+  p_type        VARCHAR(25) NOT NULL,
+  p_size        INTEGER NOT NULL,
+  p_container   VARCHAR(10) NOT NULL
+);
 
-CREATE TABLE TPCD.REGION  ( R_REGIONKEY  INTEGER NOT NULL,
-                            R_NAME       CHAR(25) NOT NULL,
-                            R_COMMENT    VARCHAR(152));
+CREATE TABLE supplier 
+(
+  s_suppkey   INTEGER NOT NULL,
+  s_name      VARCHAR(25) NOT NULL,
+  s_address   VARCHAR(25) NOT NULL,
+  s_city      VARCHAR(10) NOT NULL,
+  s_nation    VARCHAR(15) NOT NULL,
+  s_region    VARCHAR(12) NOT NULL,
+  s_phone     VARCHAR(15) NOT NULL
+);
 
-CREATE TABLE TPCD.PART  ( P_PARTKEY     INTEGER NOT NULL,
-                          P_NAME        VARCHAR(55) NOT NULL,
-                          P_MFGR        CHAR(25) NOT NULL,
-                          P_BRAND       CHAR(10) NOT NULL,
-                          P_TYPE        VARCHAR(25) NOT NULL,
-                          P_SIZE        INTEGER NOT NULL,
-                          P_CONTAINER   CHAR(10) NOT NULL,
-                          P_RETAILPRICE DECIMAL(15,2) NOT NULL,
-                          P_COMMENT     VARCHAR(23) NOT NULL );
+CREATE TABLE customer 
+(
+  c_custkey      INTEGER NOT NULL,
+  c_name         VARCHAR(25) NOT NULL,
+  c_address      VARCHAR(25) NOT NULL,
+  c_city         VARCHAR(10) NOT NULL,
+  c_nation       VARCHAR(15) NOT NULL,
+  c_region       VARCHAR(12) NOT NULL,
+  c_phone        VARCHAR(15) NOT NULL,
+  c_mktsegment   VARCHAR(10) NOT NULL
+);
 
-CREATE TABLE TPCD.SUPPLIER ( S_SUPPKEY     INTEGER NOT NULL,
-                             S_NAME        CHAR(25) NOT NULL,
-                             S_ADDRESS     VARCHAR(40) NOT NULL,
-                             S_NATIONKEY   INTEGER NOT NULL,
-                             S_PHONE       CHAR(15) NOT NULL,
-                             S_ACCTBAL     DECIMAL(15,2) NOT NULL,
-                             S_COMMENT     VARCHAR(101) NOT NULL);
-
-CREATE TABLE TPCD.PARTSUPP ( PS_PARTKEY     INTEGER NOT NULL,
-                             PS_SUPPKEY     INTEGER NOT NULL,
-                             PS_AVAILQTY    INTEGER NOT NULL,
-                             PS_SUPPLYCOST  DECIMAL(15,2)  NOT NULL,
-                             PS_COMMENT     VARCHAR(199) NOT NULL );
-
-CREATE TABLE TPCD.CUSTOMER ( C_CUSTKEY     INTEGER NOT NULL,
-                             C_NAME        VARCHAR(25) NOT NULL,
-                             C_ADDRESS     VARCHAR(40) NOT NULL,
-                             C_NATIONKEY   INTEGER NOT NULL,
-                             C_PHONE       CHAR(15) NOT NULL,
-                             C_ACCTBAL     DECIMAL(15,2)   NOT NULL,
-                             C_MKTSEGMENT  CHAR(10) NOT NULL,
-                             C_COMMENT     VARCHAR(117) NOT NULL);
-
-CREATE TABLE TPCD.ORDERS  ( O_ORDERKEY       INTEGER NOT NULL,
-                           O_CUSTKEY        INTEGER NOT NULL,
-                           O_ORDERSTATUS    CHAR(1) NOT NULL,
-                           O_TOTALPRICE     DECIMAL(15,2) NOT NULL,
-                           O_ORDERDATE      DATE NOT NULL,
-                           O_ORDERPRIORITY  CHAR(15) NOT NULL,  -- R
-                           O_CLERK          CHAR(15) NOT NULL,  -- R
-                           O_SHIPPRIORITY   INTEGER NOT NULL,
-                           O_COMMENT        VARCHAR(79) NOT NULL);
-
-CREATE TABLE TPCD.LINEITEM ( L_ORDERKEY    INTEGER NOT NULL,
-                             L_PARTKEY     INTEGER NOT NULL,
-                             L_SUPPKEY     INTEGER NOT NULL,
-                             L_LINENUMBER  INTEGER NOT NULL,
-                             L_QUANTITY    DECIMAL(15,2) NOT NULL,
-                             L_EXTENDEDPRICE  DECIMAL(15,2) NOT NULL,
-                             L_DISCOUNT    DECIMAL(15,2) NOT NULL,
-                             L_TAX         DECIMAL(15,2) NOT NULL,
-                             L_RETURNFLAG  CHAR(1) NOT NULL,
-                             L_LINESTATUS  CHAR(1) NOT NULL,
-                             L_SHIPDATE    DATE NOT NULL,
-                             L_COMMITDATE  DATE NOT NULL,
-                             L_RECEIPTDATE DATE NOT NULL,
-                             L_SHIPINSTRUCT CHAR(25) NOT NULL,  -- R
-                             L_SHIPMODE     CHAR(10) NOT NULL,  -- R
-                             L_COMMENT      VARCHAR(44) NOT NULL);
-
+CREATE TABLE date 
+(
+  d_datekey            INTEGER NOT NULL,
+  d_date               VARCHAR(19) NOT NULL,
+  d_dayofweek          VARCHAR(10) NOT NULL,
+  d_month              VARCHAR(10) NOT NULL,
+  d_year               INTEGER NOT NULL,
+  d_yearmonthnum       INTEGER NOT NULL,
+  d_yearmonth          VARCHAR(8) NOT NULL,
+  d_daynuminweek       INTEGER NOT NULL,
+  d_daynuminmonth      INTEGER NOT NULL,
+  d_daynuminyear       INTEGER NOT NULL,
+  d_monthnuminyear     INTEGER NOT NULL,
+  d_weeknuminyear      INTEGER NOT NULL,
+  d_sellingseason      VARCHAR(13) NOT NULL,
+  d_lastdayinweekfl    VARCHAR(1) NOT NULL,
+  d_lastdayinmonthfl   VARCHAR(1) NOT NULL,
+  d_holidayfl          VARCHAR(1) NOT NULL,
+  d_weekdayfl          VARCHAR(1) NOT NULL
+);
+CREATE TABLE lineorder 
+(
+  lo_orderkey          INTEGER NOT NULL,
+  lo_linenumber        INTEGER NOT NULL,
+  lo_custkey           INTEGER NOT NULL,
+  lo_partkey           INTEGER NOT NULL,
+  lo_suppkey           INTEGER NOT NULL,
+  lo_orderdate         INTEGER NOT NULL,
+  lo_orderpriority     VARCHAR(15) NOT NULL,
+  lo_shippriority      VARCHAR(1) NOT NULL,
+  lo_quantity          INTEGER NOT NULL,
+  lo_extendedprice     INTEGER NOT NULL,
+  lo_ordertotalprice   INTEGER NOT NULL,
+  lo_discount          INTEGER NOT NULL,
+  lo_revenue           INTEGER NOT NULL,
+  lo_supplycost        INTEGER NOT NULL,
+  lo_tax               INTEGER NOT NULL,
+  lo_commitdate        INTEGER NOT NULL,
+  lo_shipmode          VARCHAR(10) NOT NULL
+);
