@@ -108,14 +108,13 @@ For a detailed description of the differences betwen SSB data and its distributi
 
 In a nutshell, the differences are as follows:
 
-1. Removed: Snowflake tables such as NATION and REGION
-2. Removed: The PARTSUPP table
-3. Denormalized/Removed: The ORDER table - data is denormaized into LINEORDER.
-4. Expanded/Modified/Renamed: The fact table LINEITEM is now LINEORDER; many of its fields have been added/removed, including fields denormalized from the ORDER table.
-5. Added: A DATE dimension table
-6. Modified: Removed and added fields in existing dimension tables (e.g. SUPPLIER)
-7. LINEORDER now has data cross-reference for supplycost and revenue 
+1. Removed: Snowflake tables such as `NATION` and `REGION`
+2. Removed: The `PARTSUPP` table
+3. Denormalized/Removed: The `ORDERS` table - data is denormaized into `LINEORDER`
+4. Expanded/Modified/Renamed: The fact table `LINEITEM` is now `LINEORDER`; many of its fields have been added/removed, including fields denormalized from the ORDER table.
+5. Added: A `DATE` dimension table
+6. Modified: Removed and added fields in existing dimension tables (e.g. `SUPPLIER`)
+7. `LINEORDER` now has data cross-reference for supplycost and revenue 
 
-Also, refreshing is only applied to LINEORDER.
-
+Also, refreshing is only applied to `LINEORDER`.
 
