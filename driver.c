@@ -755,13 +755,6 @@ process_options (int count, char **vector)
 		  case 'l':			/* generate lineorder table ONLY */
 			  table = 1 << LINE;
 			  break;
-		  case 'a':
-		          table = 1 << CUST;
-			  table |= 1 << PART;
-			  table |= 1 << SUPP;
-			  table |= 1 << DATE;
-			  table |= 1 << LINE;
-			  break;
 #else
 		  case 'c':			/* generate customer ONLY */
 			  table = 1 << CUST;
@@ -933,13 +926,22 @@ int
 main (int ac, char **av)
 {
 	int i;
-	
-	table = (1 << CUST) |
+
+	table = 
+#ifdef SSBM
+		(1 << CUST) |
+		(1 << PART) |
+		(1 << SUPP) |
+		(1 << DATE) |
+		(1 << LINE);
+#else	
+		(1 << CUST) |
 		(1 << SUPP) |
 		(1 << NATION) |
 		(1 << REGION) |
 		(1 << PART_PSUPP) |
 		(1 << ORDER_LINE);
+#endif
 	force = 0;
 	insert_segments=0;
 	delete_segments=0;
