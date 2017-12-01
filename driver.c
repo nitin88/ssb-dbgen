@@ -1040,7 +1040,7 @@ main (int ac, char **av)
 				upd_num + 1, tdefs[LINE].comment, DSS_PROC);
 #else
 				fprintf (stderr,
-				"Generating update pair #%d for %s [pid: %d]",
+				"Generating update pair #%ld for %s [pid: %d]",
 				upd_num + 1, tdefs[ORDER_LINE].comment, DSS_PROC);
 
 #endif

@@ -301,11 +301,11 @@ extern tdef tdefs[];
 #define  P_NAME_SCL   5
 #endif
 #define  P_MFG_TAG    "Manufacturer#"
-#define  P_MFG_FMT     "%s%01d"
+#define  P_MFG_FMT     "%s%01ld"
 #define  P_MFG_MIN     1
 #define  P_MFG_MAX     5
 #define  P_BRND_TAG   "Brand#"
-#define  P_BRND_FMT   "%s%02d"
+#define  P_BRND_FMT   "%s%02ld"
 #define  P_BRND_MIN     1
 
 /*#ifdef SSBM
@@ -369,7 +369,7 @@ extern tdef tdefs[];
 #define  O_ODATE_MAX     (STARTDATE + TOTDATE - \
                          (L_SDTE_MAX + L_RDTE_MAX) - 1)
 #define  O_CLRK_TAG      "Clerk#"
-#define  O_CLRK_FMT      "%s%09d"
+#define  O_CLRK_FMT      "%s%09ld"
 #define  O_CLRK_SCL      1000
 #define  O_LCNT_MIN      1
 #define  O_LCNT_MAX      7
@@ -517,10 +517,10 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 #else
 #ifdef MDY_DATE
 #define  PR_DATE(tgt, yr, mn, dy)	\
-   sprintf(tgt, "%02d-%02d-19%02d", mn, dy, yr)
+   sprintf(tgt, "%02ld-%02ld-19%02ld", mn, dy, yr)
 #else
 #define  PR_DATE(tgt, yr, mn, dy)	\
-sprintf(tgt, "19%02d-%02d-%02d", yr, mn, dy)
+sprintf(tgt, "19%02ld-%02ld-%02ld", yr, mn, dy)
 #endif /* DATE_FORMAT */
 #endif
 /*
