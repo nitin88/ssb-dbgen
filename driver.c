@@ -892,13 +892,6 @@ process_options (int count, char **vector)
 				  exit (1);
 	  }
 
-#ifdef SSBM
-	  if (step > 1) {
-		  /* The Date table is fully-generated in step 1 already. */
-		  table &= ~(1 << DATE);
-	  }
-#endif
-
 #ifndef DOS
 	if (children != 1 && step == -1)
 		{
