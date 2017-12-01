@@ -5,7 +5,7 @@
 CC       = 
 # Current values for DATABASE are: INFORMIX, DB2, TDAT (Teradata)
 #                                  SQLSERVER, SYBASE
-# Current values for MACHINE are:  ATT, DOS, HP, IBM, ICL, MVS, 
+# Current values for MACHINE are:  ATT, DOS, HP, IBM, ICL, MVS,
 #                                  SGI, SUN, U2200, VMS, LINUX
 # Current values for WORKLOAD are: SSBM, TPCH, TPCR
 DATABASE = 
@@ -41,7 +41,7 @@ HDR  = $(HDR1) $(HDR2)
 #
 SRC1 = build.c driver.c bm_utils.c rnd.c print.c load_stub.c bcd2.c \
 	speed_seed.c text.c permute.c
-SRC2 = qgen.c varsub.c 
+SRC2 = qgen.c varsub.c
 SRC  = $(SRC1) $(SRC2)
 #
 OBJ1 = build$(OBJ) driver$(OBJ) bm_utils$(OBJ) rnd$(OBJ) print$(OBJ) \
@@ -50,12 +50,12 @@ OBJ2 = build$(OBJ) bm_utils$(OBJ) qgen$(OBJ) rnd$(OBJ) varsub$(OBJ) \
 	text$(OBJ) bcd2$(OBJ) permute$(OBJ) speed_seed$(OBJ)
 OBJS = $(OBJ1) $(OBJ2)
 #
-SETS = dists.dss 
+SETS = dists.dss
 #
 all: $(PROGS)
-$(PROG1): $(OBJ1) $(SETS) 
+$(PROG1): $(OBJ1) $(SETS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ1) $(LIBS)
-$(PROG2): permute.h $(OBJ2) 
+$(PROG2): permute.h $(OBJ2)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ2) $(LIBS)
 clean:
 	rm -f $(PROGS) $(OBJS)
