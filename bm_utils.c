@@ -566,6 +566,11 @@ set_state(int table, long sf, long procs, long step, long *extra_rows)
 	result = rowcount;
 	for (i=0; i < step - 1; i++)
 		{
+		if (tdefs[table].gen_seed == NULL)
+			{
+			/* must be a deterministic table, which doesn't need a random seed. */
+			continue;
+			}
 		if (table == LINE)	/* special case for shared seeds */
 			tdefs[table].gen_seed(1, rowcount);
 		else
@@ -577,7 +582,12 @@ set_state(int table, long sf, long procs, long step, long *extra_rows)
 		}
 	*extra_rows = remainder % procs;
 	if (step > procs)	/* moving to the end to generate updates */
-		tdefs[table].gen_seed(*extra_rows);
+		{
+		if (tdefs[table].gen_seed != NULL)
+			{
+			tdefs[table].gen_seed(*extra_rows);
+			}
+		}
 
 	return(result);
 }
