@@ -573,7 +573,7 @@ set_state(int table, long sf, long procs, long step, long *extra_rows)
 			}
 		if (table == LINE)	/* special case for shared seeds */
 			tdefs[table].gen_seed(1, rowcount);
-		else
+		else if (tdefs[table].gen_seed != NULL)
 			tdefs[table].gen_seed(0, rowcount);
 		/* need to set seeds of child in case there's a dependency */
 		/* NOTE: this assumes that the parent and child have the same base row count */
