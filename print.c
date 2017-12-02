@@ -151,7 +151,7 @@ dbg_print(int format, FILE *target, void *data, int len, int sep)
 	return(0);
 }
 
-#ifdef SSBM
+#ifdef SSB
 int
 pr_cust(customer_t *c, int mode)
 {
@@ -204,7 +204,7 @@ static FILE *fp = NULL;
 /*
  * print the numbered order 
  */
-#ifdef SSBM
+#ifdef SSB
 
 #else
 int
@@ -240,7 +240,7 @@ pr_order(order_t *o, int mode)
 /*
  * print an order's lineitems
  */
-#ifdef SSBM
+#ifdef SSB
 int
 pr_line(order_t *o, int mode)
 {
@@ -333,7 +333,7 @@ pr_line(order_t *o, int mode)
 /*
  * print the numbered order *and* its associated lineitems
  */
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 pr_order_line(order_t *o, int mode)
@@ -349,7 +349,7 @@ pr_order_line(order_t *o, int mode)
 /*
  * print the given part
  */
-#ifdef SSBM
+#ifdef SSB
 int
 pr_part(part_t *part, int mode)
 {
@@ -407,8 +407,8 @@ static FILE *p_fp = NULL;
 /*
  * print the given part's suppliers
  */
-#ifdef SSBM
-/*SSBM don't have partsupplier table*/       
+#ifdef SSB
+/*SSB don't have partsupplier table*/       
 #else
 int
 pr_psupp(part_t *part, int mode)
@@ -438,8 +438,8 @@ pr_psupp(part_t *part, int mode)
 /*
  * print the given part *and* its suppliers
  */
-#ifdef SSBM
-/*SSBM don't have partsupplier table*/       
+#ifdef SSB
+/*SSB don't have partsupplier table*/       
 #else
 int
 pr_part_psupp(part_t *part, int mode)
@@ -453,7 +453,7 @@ pr_part_psupp(part_t *part, int mode)
 #endif
 
 
-#ifdef SSBM
+#ifdef SSB
 int
 pr_supp(supplier_t *supp, int mode)
 {
@@ -501,7 +501,7 @@ static FILE *fp = NULL;
 }
 #endif
 
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 pr_nation(code_t *c, int mode)
@@ -649,7 +649,7 @@ pr_drange(int tbl, long min, long cnt, long num)
     return(0);
 }
 
-#ifdef SSBM
+#ifdef SSB
 int pr_date(date_t *d, int mode){
     static FILE *d_fp = NULL;
     
@@ -687,7 +687,7 @@ int pr_date(date_t *d, int mode){
  * instead of generating the actual contents of the tables. Meant to allow large scale data 
  * validation without requiring a large amount of storage
  */
-#ifdef SSBM
+#ifdef SSB
 int
 vrf_cust(customer_t *c, int mode)
 {
@@ -727,7 +727,7 @@ vrf_cust(customer_t *c, int mode)
 /*
  * print the numbered order 
  */
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 vrf_order(order_t *o, int mode)
@@ -751,7 +751,7 @@ vrf_order(order_t *o, int mode)
 /*
  * print an order's lineitems
  */
-#ifdef SSBM
+#ifdef SSB
 int
 vrf_line(order_t *o, int mode)
 {
@@ -818,7 +818,7 @@ vrf_line(order_t *o, int mode)
 /*
  * print the numbered order *and* its associated lineitems
  */
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 vrf_order_line(order_t *o, int mode)
@@ -833,7 +833,7 @@ vrf_order_line(order_t *o, int mode)
 /*
  * print the given part
  */
-#ifdef SSBM
+#ifdef SSB
 int
 vrf_part(part_t *part, int mode)
 {
@@ -876,7 +876,7 @@ vrf_part(part_t *part, int mode)
 /*
  * print the given part's suppliers
  */
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 vrf_psupp(part_t *part, int mode)
@@ -901,7 +901,7 @@ vrf_psupp(part_t *part, int mode)
 /*
  * print the given part *and* its suppliers
  */
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 vrf_part_psupp(part_t *part, int mode)
@@ -913,7 +913,7 @@ vrf_part_psupp(part_t *part, int mode)
 }
 #endif
 
-#ifdef SSBM
+#ifdef SSB
 int
 vrf_supp(supplier_t *supp, int mode)
 {
@@ -950,7 +950,7 @@ vrf_supp(supplier_t *supp, int mode)
 }
 #endif
 
-#ifdef SSBM
+#ifdef SSB
 #else
 int
 vrf_nation(code_t *c, int mode)
@@ -979,7 +979,7 @@ vrf_region(code_t *c, int mode)
 #endif
 
 
-#ifdef SSBM
+#ifdef SSB
 int vrf_date(date_t * d, int mode)
 {
     VRF_STRT(DATE);

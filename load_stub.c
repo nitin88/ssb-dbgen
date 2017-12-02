@@ -188,7 +188,7 @@ hd_nation (FILE *f)
     return(0);
 }
 
-#ifdef SSBM
+#ifdef SSB
 #else
 int 
 ld_nation (code_t *cp, int mode)
@@ -264,7 +264,7 @@ hd_part_psupp (FILE *f)
 }
 #endif
 
-#ifdef SSBM
+#ifdef SSB
 int
 ld_date (date_t *d, int mode)
 {

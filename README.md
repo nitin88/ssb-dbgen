@@ -39,12 +39,12 @@ Luckily, the Makefile is all-but-written for you, in the form of a template, [`m
 |-----------|-----------------|-----------------|
 | `DATABASE`  | Use `DB2` if you can't tell what you should use; try one of the other options if that's the DBMS you're going to benchmark with  | `INFORMIX`, `DB2`, `TDAT`, `SQLSERVER`, `SYBASE` |
 | `MACHINE`  | According to the platform/operating system you're using  | `ATT`, `DOS`, `HP`, `IBM`, `ICL`, `MVS`, `SGI`, `SUN`, `U2200`, `VMS`, `LINUX`, `MAC` |
-| `WORKLOAD`  | Use `SSBM`   | `SSBM`, `TPCH`, `TPCR` (but better not try the last two)
+| `WORKLOAD`  | Use `SSB`   | `SSB`, `TPCH`, `TPCR` (but better not try the last two)
 | `CC`  |  Use the base name of your system's C compiler (assuming it's in the search path)  | N/A |
 
 <!--2. Set the value of the  variable to `DB2` - or, if you know what you're doing and you have a specific reason to do so, to one of the other databases in the commented list of possibilities.
 3. Set `MACHINE` to the value closest to your platform (mostly commonly it's either `LINUX`, or `MAC`; Windows users - see note below)
-4. Set `WORKLOAD` to `SSBM` (theoretically, `TPCH` might also work and generate TPC-H data, but don't count on it)
+4. Set `WORKLOAD` to `SSB` (theoretically, `TPCH` might also work and generate TPC-H data, but don't count on it)
 5. Set your C compiler invocation string - either the base name if it's on your search path (e.g. `CC=gcc`) or a full pathname otherwise. -->
 
 
@@ -59,7 +59,7 @@ Your system should have the following software:
 
 Now, simply execute `make -C /path/to/your/ssb-dbgen`; on Windows, you will need to be in the repository's directory and execute `nmake`. If you're in a terminal/command prompt session, the output should have several lines looking something like this:
 ```
-gcc -O -DDBNAME=\"dss\" -DLINUX -DDB2  -DSSBM    -c -o bm_utils.o bm_utils.c
+gcc -O -DDBNAME=\"dss\" -DLINUX -DDB2  -DSSB    -c -o bm_utils.o bm_utils.c
 ```
 and finally, the executable files `dbgen` and `qgen` (or `dbgen.exe` and `qgen.exe` on Windows) should now appear in the source folder.
 

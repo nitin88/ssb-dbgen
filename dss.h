@@ -7,8 +7,8 @@
 #ifndef DSS_H
 #define  DSS_H
 
-#ifdef SSBM
-#define NAME			"SSBM (Star Schema Benchmark)"
+#ifdef SSB
+#define NAME			"SSB (Star Schema Benchmark)"
 #define VERSION           1
 #define RELEASE           0
 #define MODIFICATION      0
@@ -16,10 +16,10 @@
 
 
 /*global variables*/
-/*SSBM added DATE table*/
+/*SSB added DATE table*/
 #define  DATE           4
 
-/*SSBM use the lineorder without partsupp and order table*/
+/*SSB use the lineorder without partsupp and order table*/
 #define  L_SKEY_MIN   1
 #define  L_SKEY_MAX (tdefs[SUPP].base * scale)
 
@@ -50,7 +50,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef SSBM
+#ifdef SSB
 #include <math.h>
 #endif
 
@@ -114,7 +114,7 @@
          (((((key>>3)<<2)|(seq & 0x0003))<<3)|(key & 0x0007))
 
 #define RANDOM(tgt, lower, upper, stream)	dss_random(&tgt, lower, upper, stream)
-#ifdef SSBM
+#ifdef SSB
 typedef struct{
   char * name;
   int start_day;
@@ -295,7 +295,7 @@ extern tdef tdefs[];
  * defines which control the parts table
  */
 #define  P_SIZE       126
-#ifdef SSBM
+#ifdef SSB
 #define  P_NAME_SCL   3     /*5 change to 3 according to the new schema*/
 #else
 #define  P_NAME_SCL   5
@@ -308,7 +308,7 @@ extern tdef tdefs[];
 #define  P_BRND_FMT   "%s%02ld"
 #define  P_BRND_MIN     1
 
-/*#ifdef SSBM
+/*#ifdef SSB
 #define  P_BRND_MAX     5
 #else*/
 #define  P_BRND_MAX 40
@@ -386,7 +386,7 @@ extern tdef tdefs[];
 #define  L_DCNT_MAX   10
 #define  L_PKEY_MIN   1
 
-#ifdef SSBM
+#ifdef SSB
 /*part table log based*/
 #define  L_PKEY_MAX   (tdefs[PART].base * (floor(log((double)scale))+1))
 #else
@@ -511,7 +511,7 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 #define  PR_STRT(fp)   /* any line prep for a record goes here */
 #define  PR_END(fp)    fprintf(fp, "\n")   /* finish the record here */
 
-#ifdef SSBM
+#ifdef SSB
 #define  PR_DATE(tgt, yr, mn, dy)	\
    sprintf(tgt, "19%02ld%02ld%02ld", yr, mn, dy)
 #else

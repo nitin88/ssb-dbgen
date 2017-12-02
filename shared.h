@@ -1,6 +1,6 @@
 /*
  *  Sccsid:     @(#)shared.h	2.1.8.1
- *  Modified for SSBM
+ *  Modified for SSB
  */
 #define N_CMNT_LEN      72
 #define N_CMNT_MAX      152
@@ -9,7 +9,7 @@
 #define  MONEY_SCL     0.01
 #define  V_STR_HGH    1.6
 
-#ifdef SSBM
+#ifdef SSB
 #define  P_NAME_LEN    22
 #define  P_MFG_LEN     6
 #define  P_COLOR_LEN   3
@@ -49,7 +49,7 @@
 
 #define  P_BRND_LEN    10
 
-#ifdef SSBM
+#ifdef SSB
 #define  P_TYPE_LEN    12
 
 #else
@@ -65,7 +65,7 @@
 
 #define  S_NAME_LEN    25
 
-#ifdef SSBM
+#ifdef SSB
 #define  S_ADDR_LEN    15
 #define  S_ADDR_MAX    25
 #else
@@ -79,7 +79,7 @@
 #define  PS_CMNT_LEN  124
 #define  PS_CMNT_MAX  199
 
-#ifdef SSBM
+#ifdef SSB
 #define  C_NAME_LEN    25
 #define  C_MSEG_MIN    1
 #define  C_MSEG_MAX    5
@@ -95,7 +95,7 @@
 #define  C_CMNT_LEN    73
 #define  C_CMNT_MAX    117
 
-#ifdef SSBM
+#ifdef SSB
 #define  O_OPRIO_LEN   8
 
 #else
@@ -116,7 +116,7 @@
 #define  REGION_LEN    25
 #define  PHONE_LEN     15
 
-#ifdef SSBM
+#ifdef SSB
 #define  MAXAGG_LEN    15    /* max component length for agg str; longest string is "4-NOT SPECIFIED" */
 #else
 #define  MAXAGG_LEN    20    /* max component length for a agg str */

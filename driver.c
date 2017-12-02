@@ -106,7 +106,7 @@ char *spawn_args[25];
 /*
 * flat file print functions; used with -F(lat) option
 */
-#ifdef SSBM
+#ifdef SSB
 int pr_cust (customer_t * c, int mode);
 int pr_part (part_t * p, int mode);
 int pr_supp (supplier_t * s, int mode);
@@ -127,7 +127,7 @@ int pr_region (code_t * c, int mode);
 /*
 * inline load functions; used with -D(irect) option
 */
-#ifdef SSBM
+#ifdef SSB
 int ld_cust (customer_t * c, int mode);
 int ld_part (part_t * p, int mode);
 int ld_supp (supplier_t * s, int mode);
@@ -152,7 +152,7 @@ int ld_region (code_t * c, int mode);
 /*
 * seed generation functions; used with '-O s' option
 */
-#ifdef SSBM
+#ifdef SSB
 long sd_cust (int child, long skip_count);
 long sd_part (int child, long skip_count);
 long sd_supp (int child, long skip_count);
@@ -174,7 +174,7 @@ long sd_part_psupp (int child, long skip_count);
 /*
 * header output functions); used with -h(eader) option
 */
-#ifdef SSBM
+#ifdef SSB
 int hd_cust (FILE * f);
 int hd_part (FILE * f);
 int hd_supp (FILE * f);
@@ -196,7 +196,7 @@ int hd_region (FILE * f);
 /*
 * data verfication functions; used with -O v option
 */
-#ifdef SSBM
+#ifdef SSB
 int vrf_cust (customer_t * c, int mode);
 int vrf_part (part_t * p, int mode);
 int vrf_supp (supplier_t * s, int mode);
@@ -217,7 +217,7 @@ int vrf_region (code_t * c, int mode);
 #endif
 
 
-#ifdef SSBM
+#ifdef SSB
 tdef tdefs[] =
 {
    
@@ -379,7 +379,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 	supplier_t supp;
 	customer_t cust;
 	part_t part;
-#ifdef SSBM
+#ifdef SSB
 	date_t dt;
 #else
 	code_t code;
@@ -402,7 +402,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 	{
 		INIT_HUGE(o.okey);
 		for (i=0; i < O_LCNT_MAX; i++)
-#ifdef SSBM
+#ifdef SSB
 			INIT_HUGE(o.lineorders[i].okey);	
 #else
 			INIT_HUGE(o.l[i].okey);
@@ -418,7 +418,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 		switch (tnum)
 		{
 		case LINE:
-#ifdef SSBM
+#ifdef SSB
 #else
 		case ORDER:
   		case ORDER_LINE: 
@@ -473,7 +473,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 					tdefs[tnum].loader[direct] (&cust, upd_num);
 				}
 			break;
-#ifdef SSBM
+#ifdef SSB
 		case PART:
 #else
 		case PSUPP:
@@ -489,7 +489,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 					tdefs[tnum].loader[direct] (&part, upd_num);
 				}
 			break;
-#ifdef SSBM
+#ifdef SSB
 		case DATE:
 			mk_date (i, &dt);
 			if (set_seeds == 0)
@@ -534,7 +534,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 void
 usage (void)
 {
-#ifdef SSBM
+#ifdef SSB
 	fprintf (stderr, "%s\n%s\n\t%s\n%s %s\n\n",
 		"USAGE:",
 		"dbgen [-{vfFD}] [-O {fhmsv}][-T {pcsdla}]",
@@ -572,7 +572,7 @@ usage (void)
 	fprintf (stderr, "-s <n> -- set Scale Factor (SF) to  <n> \n");
 	fprintf (stderr, "-S <n> -- build the <n>th step of the data/update set\n");
 
-#ifdef SSBM
+#ifdef SSB
 	fprintf (stderr, "-T c   -- generate cutomers dimension table ONLY\n");
 	fprintf (stderr, "-T p   -- generate parts dimension table ONLY\n");
 	fprintf (stderr, "-T s   -- generate suppliers dimension table ONLY\n");
@@ -729,7 +729,7 @@ process_options (int count, char **vector)
 			break;
 	  case 'S':				/* generate a particular STEP */
 		  step = atoi (optarg);
-#ifdef SSBM
+#ifdef SSB
 		  if (step > 1) { 
 			  table &= ~(1 << DATE); 
 		  }
@@ -744,7 +744,7 @@ process_options (int count, char **vector)
 	  case 'T':				/* generate a specifc table */
 		  switch (*optarg)
 		  {
-#ifdef SSBM
+#ifdef SSB
 		  case 'c':			/* generate customer ONLY */
 			  table = 1 << CUST;
 			  break;
@@ -926,7 +926,7 @@ main (int ac, char **av)
 	int i;
 
 	table = 
-#ifdef SSBM
+#ifdef SSB
 		(1 << CUST) |
 		(1 << PART) |
 		(1 << SUPP) |
@@ -956,7 +956,7 @@ main (int ac, char **av)
 	updates = 0;
 	refresh = UPD_PCT;
 	step = -1;
-#ifdef SSBM
+#ifdef SSB
 	tdefs[LINE].base *=
 		ORDERS_PER_CUST;			/* have to do this after init */
 #else
@@ -1011,7 +1011,7 @@ main (int ac, char **av)
 		 */
 		double fix1;
 
-#ifdef SSBM
+#ifdef SSB
 		set_state (LINE, scale, 1, 2, (long *)&i); 
 		fix1 = (double)tdefs[LINE].base / (double)10000; /*represent the %% percentage (n/100)%*/
 #else
@@ -1034,7 +1034,7 @@ main (int ac, char **av)
 		while (upd_num < updates)
 			{
 			if (verbose > 0)
-#ifdef SSBM
+#ifdef SSB
 				fprintf (stderr,
 				"Generating update pair #%ld for %s [pid: %d]",
 				upd_num + 1, tdefs[LINE].comment, DSS_PROC);
@@ -1048,14 +1048,14 @@ main (int ac, char **av)
 			insert_lineitem_segment=0;
 			delete_segment=0;
 			minrow = upd_num * rowcnt + 1;
-#ifdef SSBM
+#ifdef SSB
 			gen_tbl (LINE, minrow, rowcnt, upd_num + 1);
 #else
 			gen_tbl (ORDER_LINE, minrow, rowcnt, upd_num + 1);
 #endif
 			if (verbose > 0)
 				fprintf (stderr, "done.\n");
-#ifdef SSBM
+#ifdef SSB
 			pr_drange (LINE, minrow, rowcnt, upd_num + 1);
 #else
 			pr_drange (ORDER_LINE, minrow, rowcnt, upd_num + 1);
@@ -1126,7 +1126,7 @@ main (int ac, char **av)
 						rowcnt = tdefs[i].base * scale;
 					else
 						rowcnt = tdefs[i].base;
-#ifdef SSBM
+#ifdef SSB
 					if(i==PART){
 					    rowcnt = tdefs[i].base * (floor(1+log((double)(scale))/(log(2))));
 					}

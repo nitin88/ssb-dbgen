@@ -3,7 +3,7 @@
 /* stuff related to the customer table */
 #include <stdio.h>
 #include <string.h>
-#ifdef SSBM
+#ifdef SSB
 #include <time.h>
 #endif
 #ifndef VMS
@@ -45,7 +45,7 @@ extern adhoc_t adhocs[];
 dbg_text(tgt, (int)(avg * V_STR_LOW),(int)(avg * V_STR_HGH), sd)
 static void gen_phone PROTO((long ind, char *target, long seed));
 
-#ifdef SSBM
+#ifdef SSB
 /* static void gen_category PROTO((char *target, long seed)); */
 int gen_city PROTO((char *cityName, char *nationName));
 int gen_season PROTO((char * dest,int month,int day));
@@ -98,7 +98,7 @@ gen_category(char *target, long seed){
 } 
 */
 
-#ifdef SSBM
+#ifdef SSB
 long mk_cust(long n_cust, customer_t *c)
 {
         long i;
@@ -204,7 +204,7 @@ hd_sparse(long i, DSS_HUGE *ok, long seq)
 	}
 #endif
 
-#ifdef SSBM
+#ifdef SSB
 long
 mk_order(long index, order_t *o, long upd_num)
 	{
@@ -398,7 +398,7 @@ mk_order(long index, order_t *o, long upd_num)
 }
 #endif
 
-#ifdef SSBM
+#ifdef SSB
 long mk_part(long index, part_t *p)
 {
 	long      mfgr,cat,brnd;
@@ -466,7 +466,7 @@ mk_part(long index, part_t *p)
 #endif
 
 
-#ifdef SSBM
+#ifdef SSB
 long
 mk_supp(long index, supplier_t *s)
 {
@@ -596,7 +596,7 @@ mk_time(long index, dss_time_t *t)
 		}
 
 
-#ifdef SSBM
+#ifdef SSB
 		/*bug!*/
 int gen_city(char *cityName, char *nationName){
     int i=0;
