@@ -48,7 +48,7 @@ Luckily, the Makefile is all-but-written for you, in the form of a template, [`m
 5. Set your C compiler invocation string - either the base name if it's on your search path (e.g. `CC=gcc`) or a full pathname otherwise. -->
 
 
-**Notes:** Windows users should, instead of the above, copy `makefile_win` to `makefile`, and edit its contents - specifically, the compiler-related file paths at its beginning.
+**Notes:** Windows users will need to set additional variables (see `makefile.suite`).
 
 #### Building using the Makefile
 
