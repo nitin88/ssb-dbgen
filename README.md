@@ -2,7 +2,7 @@ This repository holds the data generation utility for the Star Schema Benchmark 
 
 | Table of contents|
 |:----------------|
-| ["What? _Another_ fork of ssb-dbgen? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Caveat: Avoid known breakage!](#caveat)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>|
+| ["What? _Another_ fork of ssb-dbgen? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>[Trouble building/running](#trouble)<br> |
 
 ## <a name="another-fork">"What? _Another_ fork of ssb-dbgen? Why?"</a>
 
@@ -65,11 +65,11 @@ and finally, the executable files `dbgen` and `qgen` (or `dbgen.exe` and `qgen.e
 
 ## <a name="using">Using the utility to generate data</a>
 
-The `dbgen` utility should be run from within the source folder (it can be run from elsewhere but you would need to copy the `dists.dss` file at least). Invoke it specifying a table you wish to create; do not create all tables at once (see below for the reason). Typically you would also want to specify the size scale factor. Thus:
+The `dbgen` utility should be run from within the source folder (it can be run from elsewhere but you would need to specify the location of the `dists.dss` file). A typical invocation:
 
-    $ ./dbgen -v -s 10 -T c
+    $ ./dbgen -v -s 10
     
-will create the CUSTOMER table file, `customer.tbl`, in the current directory, with a scale factor of 10, i.e. 300,000 customer lines. Here are the first few lines of the resulting file:
+will create all tables in the current directory, with a scale factor of 10. This will have, for example, 300,000 lines in `customer.tbl`, beginning with something like:
 ```
 1|Customer#000000001|j5JsirBM9P|MOROCCO  0|MOROCCO|AFRICA|25-989-741-2988|BUILDING|
 2|Customer#000000002|487LW1dovn6Q4dMVym|JORDAN   1|JORDAN|MIDDLE EAST|23-768-687-3665|AUTOMOBILE|
@@ -78,31 +78,14 @@ will create the CUSTOMER table file, `customer.tbl`, in the current directory, w
 ```
 the fields are separated by a pipe character (`|`), and there's a trailing pipe at the end of the line. 
 
-After generating `.tbl` files for the CUSTOMER, PART, SUPPLIER, DATE and LINEORDER tables, you should now either load them directly into your DBMS, or apply some textual processing on them.
+After generating `.tbl` files for the CUSTOMER, PART, SUPPLIER, DATE and LINEORDER tables, you should now either load them directly into your DBMS, or apply some textual processing to them before loading.
 
 **Note:** On Unix-like systems, it is also possible to write the generated data into a FIFO filesystem node, reading from the other side with a compression utility, so as to only write compressed data to disk. This may be useful of disk space is limited and you are using a particularly high scale factor.
 
-## <a name="caveat">Caveat: Avoid known breakage!</a>
-
-The dbgen utility has several fundamental issues which the creators did not address or avoid. The maintainer of this repository, as well as developers who maintained other forks of the original ssb-dbgen code, have not gone deep into the code to make fundamental changes addressing them, limiting ourselves to minor issues which can be resolved with simple cosmetic changes - avoiding the risk of affecting the output distributions or harming the functionality in any other way.
-
-Thus:
-
-* You must generate the data of each table *separately*:
-
-      ./dbgen -T s 
-      ./dbgen -T d
-      ./dbgen -T p 
-      ./dbgen -T c
-      ./dbgen -T l
-      
-  (you would of course add other relevant command-line parameters to all invocations of the utility, e.g. the scale factor.)
-
-* The `qgen` utility may or may not be working at all; and at any rate - it does not have any query files in the repository to operate on.
-
-Have you encountered some other issue with `dbgen`? Please open a new issue on the [Issues Page](https://github.com/eyalroz/ssb-dbgen/issues); be sure to list exactly what you did and enter a copy of the terminal output of the commands you used.
+<br>
 
 ## <a name="difference-from-tpch">Differences of the generated data from the TPC-H schema</a>
+
 
 For a detailed description of the differences betwen SSB data and its distributions, as well as motivation for the differences, please read the SSB's epoynmous [paper](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF).
 
@@ -117,4 +100,8 @@ In a nutshell, the differences are as follows:
 7. `LINEORDER` now has data cross-reference for supplycost and revenue 
 
 Also, refreshing is only applied to `LINEORDER`.
+
+## <a name="trouble">Trouble building/running?</a>
+Have you encountered some other issue with `dbgen` or `qgen`? Please open a new issue on the [Issues Page](https://github.com/eyalroz/ssb-dbgen/issues); be sure to list exactly what you did and enter a copy of the terminal output of the commands you used.
+
 
