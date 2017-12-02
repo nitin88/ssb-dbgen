@@ -229,7 +229,7 @@ tdef tdefs[] =
     
 	{"customer.tbl", "customers table", 30000, hd_cust,
 		{pr_cust, ld_cust}, sd_cust, vrf_cust, NONE, 0},
-	{"date.tbl","date table",2556,0,{pr_date,ld_date}, NULL,vrf_date, NONE,0},
+	{"date.tbl","date table",2557,0,{pr_date,ld_date}, NULL,vrf_date, NONE,0},
 	/*line order is SF*1,500,000, however due to the implementation
 	  the base here is 150,000 instead if 1500,000*/
 	{"lineorder.tbl", "lineorder table", 150000, hd_line,
