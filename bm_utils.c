@@ -388,15 +388,14 @@ tbl_open(int tbl, char *mode)
 
     if (S_ISFIFO(fstats.st_mode))
         {
+        f = fopen(fullpath, mode);
+        }
+    else
+        {
         retcode =
-            open(fullpath, ((*mode == 'r')?O_RDONLY:O_WRONLY));
+            open(fullpath, ((*mode == 'r')?O_RDONLY:O_WRONLY)|O_CREAT, 0664);
         f = fdopen(retcode, mode);
         }
-    else{
-
-        f = fopen(fullpath, mode);
-
-    }
     OPEN_CHECK(f, fullpath);
     if (header && columnar && tdefs[tbl].header != NULL)
         tdefs[tbl].header(f);
