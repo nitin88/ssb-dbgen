@@ -1,3 +1,5 @@
+ # Star Schema Benchmark data set generator (dbgen) 
+
 This repository holds the data generation utility for the Star Schema Benchmark (SSB) for DBMS analytics. It generates schema data as table files, in a simple textual format, which can then be loaded into a DBMS for running the benchmark.
 
 | Table of contents|
