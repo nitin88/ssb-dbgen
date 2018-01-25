@@ -619,8 +619,8 @@ int gen_city(char *cityName, char *nationName){
 
 
 /*
-P_NAME is as long as 55 bytes in TPC-H, which is un¬reasonably large. 
-We reduce it to 22 by limiting to a concatena¬tion of two colors (see [TPC-H], pg 94). 
+P_NAME is as long as 55 bytes in TPC-H, which is unreasonably large.
+We reduce it to 22 by limiting to a concatenation of two colors (see [TPC-H], pg 94).
 We also add a new column named P_COLOR that could be used in queries where currently a 
 color must be chosen by substring from P_NAME.
 */
