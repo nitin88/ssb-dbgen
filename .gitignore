@@ -9,3 +9,6 @@ makefile
 *~
 \#\#*
 gmon.out
+.cproject
+.project
+.idea/
