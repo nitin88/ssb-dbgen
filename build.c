@@ -597,7 +597,7 @@ mk_time(long index, dss_time_t *t)
 
 
 #ifdef SSB
-		/*bug!*/
+	/*bug! <- maybe this was fixed by using a valid seed?*/
 int gen_city(char *cityName, char *nationName){
     int i=0;
     long randomPick;
@@ -610,7 +610,7 @@ int gen_city(char *cityName, char *nationName){
       for(i = nlen ; i< CITY_FIX-1;i++)
         cityName[i] = ' ';
     }
-    RANDOM(randomPick, 0, 9, 98);
+    RANDOM(randomPick, 0, 9, P_CITY_SD);
     
     sprintf(cityName+CITY_FIX-1,"%ld",randomPick);
     cityName[CITY_FIX] = '\0';
