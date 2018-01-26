@@ -15,28 +15,28 @@ set_property(CACHE WORKLOAD PROPERTY STRINGS TPCH SSB)
 set(EOL_HANDLING OFF CACHE BOOL "Skip separator after the last field in generated lines?")
 
 add_executable(dbgen
-	bcd2.c
-	bm_utils.c
-	build.c
-	driver.c
-	load_stub.c
-	permute.c
-	print.c
-	rnd.c
-	speed_seed.c
-	text.c
+	src/bcd2.c
+	src/bm_utils.c
+	src/build.c
+	src/driver.c
+	src/load_stub.c
+	src/permute.c
+	src/print.c
+	src/rnd.c
+	src/speed_seed.c
+	src/text.c
 )
 
 add_executable(qgen
-	bcd2.c
-	bm_utils.c
-	build.c
-	permute.c
-	qgen.c
-	rnd.c
-	speed_seed.c
-	text.c
-	varsub.c
+	src/bcd2.c
+	src/bm_utils.c
+	src/build.c
+	src/permute.c
+	src/qgen.c
+	src/rnd.c
+	src/speed_seed.c
+	src/text.c
+	src/varsub.c
 )
 
 target_link_libraries(dbgen m)
