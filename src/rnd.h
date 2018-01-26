@@ -79,7 +79,7 @@ seed_t     Seed[MAX_STREAM + 1] =
     {SUPP,   715851524,  0, 1}       /* BBB junk     47 */
 #ifdef SSB
     ,
-    {PART,   933588178,  0, 1},					/* P_CAT_SD     48 */
+    {PART,   637858759,  0, 1},					/* P_CAT_SD     48 */
     {SUPP,   1495190827, 0, 1}					/* P_CITY_SD     49 */
 #endif
 };
