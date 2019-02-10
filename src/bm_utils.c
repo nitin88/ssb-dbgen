@@ -32,14 +32,14 @@
 #include <errno.h>
 #include <string.h>
 
-#ifdef HP
+#ifdef HAVE_STRINGS_H
 #include <strings.h>
-#endif            /* HP */
+#endif 
 #include <ctype.h>
 #include <math.h>
-#ifndef _POSIX_SOURCE
+#ifndef _POSIX_C_SOURCE
 #include <malloc.h>
-#endif /* POSIX_SOURCE */
+#endif /* _POSIX_C_SOURCE */
 
 #include <fcntl.h>
 
@@ -50,7 +50,7 @@
 #include <sys/stat.h>
 /* Lines added by Chuck McDevitt for WIN32 support */
 #if	(defined(WIN32)||defined(DOS))
-#ifndef _POSIX_
+#ifndef _POSIX_C_SOURCE
 #include <io.h>
 #ifndef S_ISREG
 

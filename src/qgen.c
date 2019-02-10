@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#if (defined(_POSIX_)||!defined(WIN32))
+#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )
 #include <unistd.h>
 #else
 #include "process.h"
@@ -405,6 +405,9 @@ int main(int ac, char **av)
 	    {
 	    if (!(flags & SEED))
             {
+			/* Note:
+			 * The multiplication by the process ID is a change in ssb-dbgen relative to TPC-H dbgen 
+			 */
             rndm = (long)((unsigned)time(NULL) * DSS_PROC);
             }
 		if (rndm < 0)
