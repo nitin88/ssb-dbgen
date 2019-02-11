@@ -32,6 +32,7 @@ check_type_size("short"            SIZEOF_SHORT)
 check_include_file(strings.h       HAVE_STRINGS_H)
 check_include_file(inttypes.h      HAVE_INTTYPES_H)
 check_include_file(stdint.h        HAVE_STDINT_H)
+check_include_file(malloc.h        HAVE_MALLOC_H)
 check_include_file(sys/bittypes.h  HAVE_SYS_BITTYPES_H)
 
 check_function_exists(getopt       HAVE_GETOPT)

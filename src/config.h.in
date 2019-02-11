@@ -30,6 +30,7 @@
 #cmakedefine HAVE_INTTYPES_H
 #cmakedefine HAVE_STDINT_H
 #cmakedefine HAVE_SYS_BITTYPES_H
+#cmakedefine HAVE_MALLOC_H
 
 #define RNG_TEST
 #define _FILE_OFFSET_BITS 64
@@ -78,7 +79,6 @@
 
 #ifdef __APPLE__ 
 #define _POSIX_C_SOURCE 200112L
-#define _POSIX_C_SOURCE
 #endif 
 
 #if (defined(_WIN32) && !defined(_POSIX)) || defined(__CYGWIN__)
