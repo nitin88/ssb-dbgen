@@ -277,6 +277,7 @@ int *pids;
 void
 stop_proc (int signum)
 {
+	UNUSED(signum);
 	exit (0);
 }
 

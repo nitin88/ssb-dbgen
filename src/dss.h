@@ -79,6 +79,10 @@
 #define MAX(a,b) ((a > b )?a:b)
 #define MIN(A,B)  ( (A) < (B) ? (A) : (B))
 
+#ifndef UNUSED
+#define UNUSED(x) (void) x
+#endif
+
 #define INTERNAL_ERROR(p)  {fprintf(stderr,"%s", p);abort();}
 
 #define MALLOC_CHECK(var) \

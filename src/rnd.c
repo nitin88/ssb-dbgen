@@ -49,6 +49,7 @@ void
 row_start(int t)	\
 {
 	int i;
+	UNUSED(t);
 	for (i=0; i <= MAX_STREAM; i++) 
 		Seed[i].usage = 0 ; 
 	

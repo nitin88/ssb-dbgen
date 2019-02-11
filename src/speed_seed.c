@@ -92,7 +92,14 @@ typedef signed long RND;
 typedef unsigned long URND;
 
 #define FatalError(e)  F_FatalError( (e), __FILE__, __LINE__ )
-void F_FatalError( int x, char *y, int z ) {fprintf(stderr, "Bang!\n");}
+
+void F_FatalError( int x, char *y, int z )
+{
+    UNUSED(x);
+    UNUSED(y);
+    UNUSED(z);
+    fprintf(stderr, "Bang!\n");
+}
 
 
 /* Prototypes */
@@ -236,6 +243,7 @@ sd_part(int child, long skip_count)
 {
    int i;
  
+   UNUSED(child);
    for (i=P_MFG_SD; i<= P_CNTR_SD; i++)
        ADVANCE_STREAM(i, skip_count);
  
@@ -270,6 +278,7 @@ sd_line(int child, long skip_count)
 long 
 sd_order(int child, long skip_count)        
 {
+   UNUSED(child);
    ADVANCE_STREAM(O_LCNT_SD, skip_count);
    ADVANCE_STREAM(O_CKEY_SD, skip_count);
    FAKE_V_STR(O_CMNT_LEN, O_CMNT_SD, skip_count);
@@ -286,6 +295,7 @@ sd_psupp(int child, long skip_count)
 	{
 	int j;
 	
+	UNUSED(child);
 	for (j=0; j < SUPP_PER_PART; j++)
 		{
 		ADVANCE_STREAM(PS_QTY_SD, skip_count);
@@ -299,7 +309,7 @@ sd_psupp(int child, long skip_count)
 long 
 sd_cust(int child, long skip_count)
 {
-   
+   UNUSED(child);
    FAKE_V_STR(C_ADDR_LEN, C_ADDR_SD, skip_count);
    FAKE_V_STR(C_CMNT_LEN, C_CMNT_SD, skip_count);
    ADVANCE_STREAM(C_NTRG_SD, skip_count);
@@ -312,6 +322,7 @@ sd_cust(int child, long skip_count)
 long
 sd_supp(int child, long skip_count)
 {
+   UNUSED(child);
    ADVANCE_STREAM(S_NTRG_SD, skip_count);
    ADVANCE_STREAM(S_PHNE_SD, 3L * skip_count);
    ADVANCE_STREAM(S_ABAL_SD, skip_count);

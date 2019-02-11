@@ -156,7 +156,8 @@ int
 pr_cust(customer_t *c, int mode)
 {
 static FILE *fp = NULL;
-        
+
+   UNUSED(mode);
    if (fp == NULL)
         fp = print_prep(CUST, 0);
 
@@ -355,6 +356,7 @@ pr_part(part_t *part, int mode)
 {
     static FILE *p_fp = NULL;
 
+    UNUSED(mode);
     if (p_fp == NULL)
 	p_fp = print_prep(PART, 0);
 
@@ -653,6 +655,7 @@ pr_drange(int tbl, long min, long cnt, long num)
 int pr_date(date_t *d, int mode){
     static FILE *d_fp = NULL;
     
+    UNUSED(mode);
     if (d_fp == NULL)
 	d_fp = print_prep(DATE, 0);
 
@@ -691,6 +694,7 @@ int pr_date(date_t *d, int mode){
 int
 vrf_cust(customer_t *c, int mode)
 {
+   UNUSED(mode);
    VRF_STRT(CUST);
    VRF_INT(CUST, c->custkey);
    VRF_STR(CUST, c->name);
@@ -757,6 +761,7 @@ vrf_line(order_t *o, int mode)
 {
     int i;
 
+    UNUSED(mode);
     for (i = 0; i < o->lines; i++)
         {
 	    VRF_STRT(LINE);
@@ -838,6 +843,7 @@ int
 vrf_part(part_t *part, int mode)
 {
 
+    UNUSED(mode);
     VRF_STRT(PART);
     VRF_INT(PART, part->partkey);
     VRF_STR(PART, part->name);
@@ -917,6 +923,7 @@ vrf_part_psupp(part_t *part, int mode)
 int
 vrf_supp(supplier_t *supp, int mode)
 {
+    UNUSED(mode);
     VRF_STRT(SUPP);
     VRF_INT(SUPP, supp->suppkey);
     VRF_STR(SUPP, supp->name);
@@ -982,6 +989,7 @@ vrf_region(code_t *c, int mode)
 #ifdef SSB
 int vrf_date(date_t * d, int mode)
 {
+    UNUSED(mode);
     VRF_STRT(DATE);
     VRF_INT(DATE, d->datekey);
     VRF_STR(DATE, d->date);
