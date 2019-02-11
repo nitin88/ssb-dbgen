@@ -520,18 +520,33 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 #define  PR_STRT(fp)   /* any line prep for a record goes here */
 #define  PR_END(fp)    fprintf(fp, "\n")   /* finish the record here */
 
+
 #ifdef SSB
-#define  PR_DATE(tgt, yr, mn, dy)	\
-   sprintf(tgt, "19%02ld%02ld%02ld", yr, mn, dy)
+#define  PR_DATE(tgt, yr, mn, dy) { \
+	int yr_  = yr; \
+	int mn_  = mn; \
+	int dy_  = dy; \
+	snprintf(tgt, 4+2+2+1, "19%02d%02d%02d", yr_, mn_, dy_); \
+}
 #else
 #ifdef MDY_DATE
-#define  PR_DATE(tgt, yr, mn, dy)	\
-   sprintf(tgt, "%02ld-%02ld-19%02ld", mn, dy, yr)
+#define  PR_DATE(tgt, yr, mn, dy) { \
+	int yr_  = yr; \
+	int mn_  = mn; \
+	int dy_  = dy; \
+	snprintf(tgt, 2+1+2+1+4+1, "%02d-%02d-19%02d", mn_, dy_, yr_) \
+}
+
 #else
-#define  PR_DATE(tgt, yr, mn, dy)	\
-sprintf(tgt, "19%02ld-%02ld-%02ld", yr, mn, dy)
+#define  PR_DATE(tgt, yr, mn, dy) { \
+	int yr_  = yr; \
+	int mn_  = mn; \
+	int dy_  = dy; \
+	snprintf(tgt, 2+1+2+1+4+1, "%02d-%02d-19%02d", yr_, mn_, dy_) \
+}
 #endif /* DATE_FORMAT */
 #endif
+
 /*
  * verification macros
  */

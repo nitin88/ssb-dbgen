@@ -907,6 +907,7 @@ process_options (int count, char **vector)
 			  default:
 				  printf ("ERROR: option '%c' unknown.\n",
 					  *(vector[optind] + 1));
+				  /* fallthrough */
 			  case 'h':				/* something unexpected */
 				  fprintf (stderr,
 					  "%s Population Generator (Version %d.%d.%d%s)\n",
