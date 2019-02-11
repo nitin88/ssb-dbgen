@@ -10,9 +10,6 @@ dist: xenial
 matrix:
   include:
     - os: osx
-      osx_image: xcode6.4
-
-    - os: osx
       osx_image: xcode7.3
 
     - os: osx
@@ -110,16 +107,6 @@ matrix:
             - clang-6.0
       env:
         - MATRIX_EVAL="export CC=clang-6.0"
-
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-xenial-7.0
-          packages:
-            - clang-7.0
-      env:
-        - MATRIX_EVAL="export CC=clang-7.0"
 
 before_install:
 - eval "${MATRIX_EVAL}"
