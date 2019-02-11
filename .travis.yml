@@ -39,14 +39,8 @@ matrix:
          - MATRIX_EVAL="export CC=gcc-5"
 
     - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
       env:
-        - MATRIX_EVAL="export CC=gcc-6"
+        - MATRIX_EVAL="echo GCC 6 should be used by default"
  
     - os: linux
       addons:
