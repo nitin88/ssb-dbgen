@@ -11,7 +11,7 @@
 #include "dss.h"
 #ifdef TEST
 #include <stdlib.h>
-#if (defined(_POSIX_)||!defined(WIN32))		/* Change for Windows NT */
+#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )		/* Change for Windows NT */
 #include <unistd.h>
 #include <sys/wait.h>
 #endif /* WIN32 */
@@ -22,10 +22,10 @@
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
-#ifdef HP
+#ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif
-#if (defined(WIN32)&&!defined(_POSIX_))
+#if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
 #include <process.h>
 #pragma warning(disable:4201)
 #pragma warning(disable:4214)

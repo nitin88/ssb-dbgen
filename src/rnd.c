@@ -19,6 +19,19 @@
 #include "rnd.h" 
 #include <assert.h>
 
+/* Note: This file may not currently be using anything from <inttypes.h> or <stdint.h> */
+#ifdef HAVE_INTTYPES_H
+#include <inttypes.h>
+#else  /* HAVE_INTTYPES_H */
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#else  /* HAVE_STDINT_H */
+#ifdef HAVE_SYS_BITTYPES_H
+#include <sys/bittypes.h>
+#endif /* HAVE_SYS_BITTYPES_H */
+#endif /* HAVE_STDINT_H */
+#endif /* HAVE_INTTYPES_H */
+
 char *env_config PROTO((char *tag, char *dflt));
 void NthElement(long, long *);
 
@@ -36,6 +49,7 @@ void
 row_start(int t)	\
 {
 	int i;
+	UNUSED(t);
 	for (i=0; i <= MAX_STREAM; i++) 
 		Seed[i].usage = 0 ; 
 	
@@ -187,7 +201,7 @@ UnifInt(long nLow, long nHigh, long nStream)
         nHigh = nTemp;
     }
 
-    dRange = DOUBLE_CAST (nHigh - nLow + 1);
+    dRange = (double) (nHigh - nLow + 1);
     Seed[nStream].value = NextRand(Seed[nStream].value);
     nTemp = (long) (((double) Seed[nStream].value / dM) * (dRange));
     return (nLow + nTemp);

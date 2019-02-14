@@ -7,7 +7,7 @@
 
 #include "config.h"
 #include <stdlib.h>
-#if (defined(_POSIX_)||!defined(WIN32))		/* Change for Windows NT */
+#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )		/* Change for Windows NT */
 #ifndef DOS
 #include <unistd.h>
 #include <sys/wait.h>
@@ -21,10 +21,11 @@
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
-#ifdef HP
+#ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif
-#if (defined(WIN32)&&!defined(_POSIX_))
+/* TODO: Do we really need al of these Windows-specifi definitions? */
+#if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
 #include <process.h>
 #pragma warning(disable:4201)
 #pragma warning(disable:4214)
@@ -75,7 +76,7 @@ extern int optind, opterr;
 extern char *optarg;
 long rowcnt = 0, minrow = 0, upd_num = 0;
 double flt_scale;
-#if (defined(WIN32)&&!defined(_POSIX_))
+#if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
 char *spawn_args[25];
 #endif
 
@@ -276,21 +277,32 @@ int *pids;
 void
 stop_proc (int signum)
 {
+	UNUSED(signum);
 	exit (0);
 }
+
+/*
+ * Notes:
+ * The parallell load code is at best brittle, and seems not to 
+ * have been tested or even built on non-Linux platforms.
+ */
+
+#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )
 
 void
 kill_load (void)
 {
 	int i;
 	
-#if !defined(U2200) && !defined(DOS)
-	for (i = 0; i < children; i++)
+	for (i = 0; i < children; i++) 
+	{
 		if (pids[i])
-			KILL (pids[i]);
-#endif /* !U2200 && !DOS */
-		return;
+			kill(SIGUSR1, pids[i]);
+	}
+	return;
 }
+
+#endif
 
 /*
 * re-set default output file names 
@@ -635,7 +647,13 @@ partial (int tbl, int s)
 	return (0);
 }
 
-#ifndef DOS
+/*
+ * Notes:
+ * This code is at best brittle, and seems not to have been tested or
+ * even built on non-Linux platforms.
+ */
+
+#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )
 
 int
 pload (int tbl)
@@ -649,22 +667,24 @@ pload (int tbl)
 	}
 	for (c = 0; c < children; c++)
 	{
-		pids[c] = SPAWN ();
+		pids[c] = fork();
 		if (pids[c] == -1)
 		{
 			perror ("Child loader not created");
-			kill_load ();
+			kill_load();
 			exit (-1);
 		}
 		else if (pids[c] == 0)	/* CHILD */
 		{
-			SET_HANDLER (stop_proc);
+			signal(SIGUSR1, stop_proc);
 			verbose = 0;
 			partial (tbl, c+1);
 			exit (0);
 		}
 		else if (verbose > 0)			/* PARENT */
+		{
 			fprintf (stderr, ".");
+		}
 	}
 	
 	if (verbose > 0)
@@ -673,7 +693,7 @@ pload (int tbl)
 	c = children;
 	while (c)
 	{
-		i = WAIT (&status, pids[c - 1]);
+		i = wait(&status);
 		if (i == -1 && children)
 		{
 			if (errno == ECHILD)
@@ -701,7 +721,7 @@ pload (int tbl)
 		fprintf (stderr, "done\n");
 	return (0);
 }
-#endif
+#endif /* ( defined(_POSIX_C_SOURCE) || !defined(WIN32) ) */
 
 
 void
@@ -887,6 +907,7 @@ process_options (int count, char **vector)
 			  default:
 				  printf ("ERROR: option '%c' unknown.\n",
 					  *(vector[optind] + 1));
+				  /* fallthrough */
 			  case 'h':				/* something unexpected */
 				  fprintf (stderr,
 					  "%s Population Generator (Version %d.%d.%d%s)\n",
@@ -974,11 +995,8 @@ main (int ac, char **av)
 	children = 1;
 	d_path = NULL;
 	
-#ifdef NO_SUPPORT
-	signal (SIGINT, exit);
-#endif /* NO_SUPPORT */
 	process_options (ac, av);
-#if (defined(WIN32)&&!defined(_POSIX_))
+#if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
 	for (i = 0; i < ac; i++)
 	{
 		spawn_args[i] = malloc ((strlen (av[i]) + 1) * sizeof (char));
@@ -1092,6 +1110,7 @@ main (int ac, char **av)
 		if (table & (1 << i))
 		{
 			if (children > 1 && i < NATION)
+			{
 				if (step >= 0)
 				{
 					if (validate)
@@ -1101,7 +1120,7 @@ main (int ac, char **av)
 					else
 						partial (i, step);
 				}
-#ifdef DOS
+#ifndef _POSIX_C_SOURCE
 				else
 				{
 					fprintf (stderr,
@@ -1118,32 +1137,33 @@ main (int ac, char **av)
 					else
 						pload (i);
 				}
-#endif /* DOS */
+#endif /* _POSIX_C_SOURCE */
+			}
+			else
+			{
+				minrow = 1;
+				if (i < NATION)
+					rowcnt = tdefs[i].base * scale;
 				else
-				{
-					minrow = 1;
-					if (i < NATION)
-						rowcnt = tdefs[i].base * scale;
-					else
-						rowcnt = tdefs[i].base;
+					rowcnt = tdefs[i].base;
 #ifdef SSB
-					if(i==PART){
-					    rowcnt = tdefs[i].base * (floor(1+log((double)(scale))/(log(2))));
-					}
-					if(i==DATE){
-					    rowcnt = tdefs[i].base;
-					}
-#endif
-					if (verbose > 0)
-						fprintf (stderr, "%s data for %s [pid: %d]: ",
-						(validate)?"Validating":"Generating", tdefs[i].comment, DSS_PROC);
-					gen_tbl (i, minrow, rowcnt, upd_num);
-					if (verbose > 0)
-						fprintf (stderr, "done.\n");
+				if(i==PART){
+					rowcnt = tdefs[i].base * (floor(1+log((double)(scale))/(log(2))));
 				}
-				if (validate)
-					printf("Validation checksum for %s at %ld GB: %0lx\n", 
-						 tdefs[i].name, scale, tdefs[i].vtotal);
+				if(i==DATE){
+					rowcnt = tdefs[i].base;
+				}
+#endif
+				if (verbose > 0)
+					fprintf (stderr, "%s data for %s [pid: %d]: ",
+					(validate)?"Validating":"Generating", tdefs[i].comment, DSS_PROC);
+				gen_tbl (i, minrow, rowcnt, upd_num);
+				if (verbose > 0)
+					fprintf (stderr, "done.\n");
+			}
+			if (validate)
+				printf("Validation checksum for %s at %ld GB: %0lx\n",
+					 tdefs[i].name, scale, tdefs[i].vtotal);
 		}
 			
 		if (direct)
