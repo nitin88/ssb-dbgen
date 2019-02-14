@@ -1,6 +1,8 @@
- # Star Schema Benchmark data set generator (dbgen) 
+ # Star Schema Benchmark data set generator (ssb-dbgen)  
 
 This repository holds the data generation utility for the Star Schema Benchmark (SSB) for DBMS analytics. It generates schema data as table files, in a simple textual format, which can then be loaded into a DBMS for running the benchmark.
+
+Package build status on Travis CI: [![Build Status](https://travis-ci.org/eyalroz/ssb-dbgen.png?branch=master)](https://travis-ci.org/eyalroz/ssb-dbgen)
 
 | Table of contents|
 |:----------------|
