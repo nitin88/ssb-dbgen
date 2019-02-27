@@ -41,6 +41,7 @@ check_include_file(strings.h HAVE_STRINGS_H)
 check_include_file(inttypes.h HAVE_INTTYPES_H)
 
 # ... for Windows
+check_include_file(getopt.h HAVE_GETOPT_H)
 check_include_file(process.h HAVE_PROCESS_H)
 check_include_file(windows.h HAVE_WINDOWS_H)    
 
