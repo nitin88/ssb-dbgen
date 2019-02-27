@@ -64,7 +64,7 @@ bcd2_bin(DSS_HUGE *dest, DSS_HUGE bcd)
     return(0);
 }
 
-int
+DSS_HUGE
 bcd2_add(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE addend)
 {
     DSS_HUGE tmp_lo, tmp_hi, carry, res;
@@ -84,7 +84,7 @@ bcd2_add(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE addend)
     return(carry);
 }
 
-int
+DSS_HUGE
 bcd2_sub(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE subend)
 {
     DSS_HUGE tmp_lo, tmp_hi, carry, res;
@@ -107,11 +107,12 @@ bcd2_sub(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE subend)
     return(carry);
 }
 
-int
+DSS_HUGE
 bcd2_mul(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE multiplier)
 {
     DSS_HUGE tmp_lo, tmp_hi, carry, m_lo, m_hi, m1, m2;
-    int udigit, ldigit, res;
+    int udigit, ldigit;
+	DSS_HUGE res;
 
     tmp_lo = *bcd_low;
     tmp_hi = *bcd_high;
@@ -144,7 +145,7 @@ bcd2_mul(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE multiplier)
     return(carry);
 }
 
-int
+DSS_HUGE
 bcd2_div(DSS_HUGE *bcd_low, DSS_HUGE *bcd_high, DSS_HUGE divisor)
 {
     DSS_HUGE tmp_lo, tmp_hi, carry, d1, res, digit;

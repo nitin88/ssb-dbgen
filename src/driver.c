@@ -73,15 +73,16 @@ int		prep_direct (char *);
 int		close_direct (void);
 void	kill_load (void);
 int		pload (int tbl);
-void	gen_tbl (int tnum, long start, long count, long upd_num);
-int		pr_drange (int tbl, long min, long cnt, long num);
+void	gen_tbl (int tnum, DSS_HUGE start, DSS_HUGE count, long upd_num);
+int		pr_drange (int tbl, DSS_HUGE min, DSS_HUGE cnt, long num);
 int		set_files (int t, int pload);
 int		partial (int, int);
 
 
 extern int optind, opterr;
 extern char *optarg;
-long rowcnt = 0, minrow = 0, upd_num = 0;
+DSS_HUGE rowcnt = 0, minrow = 0;
+long upd_num = 0;
 double flt_scale;
 #if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
 char *spawn_args[25];
@@ -392,7 +393,7 @@ load_dists (void)
 * generate a particular table
 */
 void
-gen_tbl (int tnum, long start, long count, long upd_num)
+gen_tbl (int tnum, DSS_HUGE start, DSS_HUGE count, long upd_num)
 {
 	static order_t o;
 	supplier_t supp;
@@ -405,7 +406,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 #endif
 	static int completed = 0;
 	static int init = 0;
-	long i;
+	DSS_HUGE i;
 
 	int rows_per_segment=0;
 	int rows_this_segment=-1;
@@ -541,7 +542,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 		row_stop(tnum);
 		if (set_seeds && (i % tdefs[tnum].base) < 2)
 		{
-			printf("\nSeeds for %s at rowcount %ld\n", tdefs[tnum].comment, i);
+			printf("\nSeeds for %s at rowcount " HUGE_FORMAT "\n", tdefs[tnum].comment, i);
 			dump_seeds(tnum);
 		}
 	}
@@ -1177,14 +1178,4 @@ main (int ac, char **av)
 			
 		return (0);
 }
-
-
-
-
-
-
-
-
-
-
 
