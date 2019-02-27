@@ -694,11 +694,13 @@ mk_date(long index,date_t *d)
     /*make Sunday be the first day of a week */
     d->daynuminweek=((long)localTime->tm_wday+1)%7+1;
     d->monthnuminyear=(long)localTime->tm_mon+1;
-#ifdef __GNUC__
+#if __GNUC__ >= 8
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     strncpy(d->dayofweek, weekday_names[d->daynuminweek-1],D_DAYWEEK_LEN+1);
     strncpy(d->month,month_names[d->monthnuminyear-1],D_MONTH_LEN+1);
+#if __GNUC__ >= 8
 #pragma GCC diagnostic pop
 #endif
     d->year=(long)localTime->tm_year + 1900;
