@@ -552,11 +552,14 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
  */
 #define  VRF_STR(t, d) {char *xx = d; while (*xx) tdefs[t].vtotal += *xx++;}
 #define  VRF_INT(t,d)  tdefs[t].vtotal += d
-#ifdef SUPPORT_64BITS
-#define  VRF_HUGE(t,d)	tdefs[t].vtotal = *((DSS_HUGE *)&d) + *((DSS_HUGE *)(&d + 1))
-#else
+/* The following conditional definition is not necessary by this point, since
+ * d is already a DSS_HUGE in the contexts in which this macro is expanded.
+ */
+// #ifdef SUPPORT_64BITS
+// #define  VRF_HUGE(t,d)	tdefs[t].vtotal = *((DSS_HUGE *)&d) + *((DSS_HUGE *)(&d + 1))
+// #else
 #define VRF_HUGE(t,d)	tdefs[t].vtotal += d[0] + d[1]
-#endif /* SUPPORT_64BITS */
+// #endif /* SUPPORT_64BITS */
 /* assume float is a 64 bit quantity */
 #define  VRF_MONEY(t,d)	tdefs[t].vtotal = *((long *)&d) + *((long *)(&d + 1))
 #define  VRF_CHR(t,d)	tdefs[t].vtotal += d
