@@ -27,9 +27,11 @@
 #include <sys/wait.h>
 #elif (defined(HAVE_PROCESS_H) && defined(HAVE_WINDOWS_H)) // Windows system
 #include <process.h>
+#ifdef _MSC_VER
 #pragma warning(disable:4201)
 #pragma warning(disable:4214)
 #pragma warning(disable:4514)
+#endif
 #define WIN32_LEAN_AND_MEAN
 #define NOATOM
 #define NOGDICAPMASKS
@@ -47,8 +49,10 @@
 #define NOKANJI
 #define NOMCX
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(default:4201)
 #pragma warning(default:4214)
+#endif
 #endif /* (defined(HAVE_UNISTD_H) && defined(HAVE_SYS_WAIT_H)) */
 #endif /* TEST */
 

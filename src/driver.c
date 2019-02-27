@@ -34,9 +34,11 @@
 #elif (defined(HAVE_PROCESS_H) && defined(HAVE_WINDOWS_H)) // Windows system
 /* TODO: Do we really need all of these Windows-specific definitions? */
 #include <process.h>
+#ifdef _MSC_VER
 #pragma warning(disable:4201)
 #pragma warning(disable:4214)
 #pragma warning(disable:4514)
+#endif
 #define WIN32_LEAN_AND_MEAN
 #define NOATOM
 #define NOGDICAPMASKS
@@ -54,10 +56,11 @@
 #define NOKANJI
 #define NOMCX
 
-#include "windows.h"
-
+#include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(default:4201)
 #pragma warning(default:4214)
+#endif
 #endif
 
 #include "dss.h"
