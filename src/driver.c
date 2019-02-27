@@ -23,15 +23,27 @@
 #include <strings.h>
 #endif
 
+#ifndef STDLIB_HAS_GETOPT
+int     getopt(int arg_cnt, char **arg_vect, char *options);
+#endif /* STDLIB_HAS_GETOPT */
+
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
 #endif
 
-
-#if (defined(HAVE_UNISTD_H) && defined(HAVE_SYS_WAIT_H)) // POSIX-compatible system
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+#ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
-#elif (defined(HAVE_PROCESS_H) && defined(HAVE_WINDOWS_H)) // Windows system
+#endif
+
+#ifdef HAVE_GETOPT_H
+#include <getopt.h>
+#endif
+
+#if (defined(HAVE_PROCESS_H) && defined(HAVE_WINDOWS_H)) // Windows system
 /* TODO: Do we really need all of these Windows-specific definitions? */
 #include <process.h>
 #ifdef _MSC_VER
@@ -948,8 +960,7 @@ process_options (int count, char **vector)
 /*
 * MAIN
 *
-* assumes the existance of getopt() to clean up the command 
-* line handling
+* using getopt() to clean up the command line handling
 */
 int
 main (int ac, char **av)
