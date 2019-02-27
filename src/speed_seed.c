@@ -23,8 +23,8 @@ extern seed_t Seed[];
 /* The book says that this will work if MAXINT for the type you choose    */
 /* is at least 2**46  - 1, so 64 bits is more than you *really* need      */
 
-static DSS_HUGE Multiplier = 16807;      /* or whatever nonstandard */
-static DSS_HUGE Modulus =  2147483647;   /* trick you use to get 64 bit int */
+static int Multiplier = 16807;        /* or whatever nonstandard */
+static long Modulus =  2147483647L;   /* trick you use to get 64 bit int */
 
 /* Advances value of Seed after N applications of the random number generator
    with multiplier Mult and given Modulus.

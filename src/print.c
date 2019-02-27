@@ -23,7 +23,7 @@
  * Function Prototypes
  */
 FILE *print_prep PROTO((int table, int update));
-int pr_drange PROTO((int tbl, long min, long cnt, long num));
+int pr_drange PROTO((int tbl, DSS_HUGE min, DSS_HUGE cnt, long num));
 
 FILE *
 print_prep(int table, int update)
@@ -546,9 +546,9 @@ static FILE *fp = NULL;
  * oversight
  */
 int
-pr_drange(int tbl, long min, long cnt, long num)
+pr_drange(int tbl, DSS_HUGE min, DSS_HUGE cnt, long num)
 {
-    static int  last_num = 0;
+    static long  last_num = 0;
     static FILE *dfp = NULL;
     int child = -1;
     long start, last, new;
