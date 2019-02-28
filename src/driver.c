@@ -23,9 +23,13 @@
 #include <strings.h>
 #endif
 
-#ifndef STDLIB_HAS_GETOPT
+#if defined(STDLIB_HAS_GETOPT)
+/* do nothing */
+#elif defined(HAVE_GETOPT_H)
+#include <getopt.h>
+#else
 int     getopt(int arg_cnt, char **arg_vect, char *options);
-#endif /* STDLIB_HAS_GETOPT */
+#endif /* defined(STDLIB_HAS_GETOPT) */
 
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>
@@ -37,10 +41,6 @@ int     getopt(int arg_cnt, char **arg_vect, char *options);
 
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
-#endif
-
-#ifdef HAVE_GETOPT_H
-#include <getopt.h>
 #endif
 
 #if (defined(HAVE_PROCESS_H) && defined(HAVE_WINDOWS_H)) // Windows system

@@ -5,7 +5,6 @@
  * 
  * The following #defines will effect the code:
  *   SEPARATOR         -- character used to separate fields in flat files
- *   STDLIB_HAS_GETOPT -- to prevent confilcts with global getopt() 
  *   MDY_DATE          -- generate dates as MM-DD-YY
  *   WIN32             -- support for WindowsNT
  *   DSS_HUGE          -- 64 bit data type
@@ -79,10 +78,9 @@
 #define HUGE_COUNT        1
 #define HUGE_DATE_FORMAT  "%02" HUGE_FORMAT_SPECIFIER
 
-#cmakedefine01 HAVE_GETOPT
-#if (HAVE_GETOPT == 1)
-#define STDLIB_HAS_GETOPT 1
-#endif
+#cmakedefine HAVE_GETOPT_H
+#cmakedefine STDLIB_HAS_GETOPT
+#cmakedefine STDLIB_HAS_GETENV
 
 #cmakedefine01 HAVE_GETPID
 #if (HAVE_GETPID == 1)
