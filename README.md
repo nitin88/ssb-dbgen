@@ -14,7 +14,7 @@ The `ssb-dbgen` utility is based on the [TPC-H benchmark](http://tpc.org/tpch/)'
 
 The result has seen several repositories here on github with various changes to the code, intended to resolve this or the other issue with compilation or execution, occasionally adding new files (such as scripts for loading the data into a DBMS, generating compressed data files, removing the trailing pipe characters etc.). This means a tree of mostly unsynchronized repositories - with most having been essentially abandoned: Last commits several years ago with more than a couple of issues unresolved.
 
-This effort is an attempt to **unify** all of those disparate repositories, taking all changes to the code which - in my opinion - are generally applicable, and applying them altogether while resolving any conflicts. Details of what's already been done can be found on the [Closed Issues Page](https://github.com/eyalroz/ssb-dbgen/issues?q=is%3Aissue+is%3Aclosed) and of course by examining the commit comments.
+This effort is an attempt to **unify** all of those disparate repositories, taking all changes to the code which - in my opinion - are generally applicable, and applying them all together while resolving any conflicts. Details of what's already been done can be found on the [Closed Issues Page](https://github.com/eyalroz/ssb-dbgen/issues?q=is%3Aissue+is%3Aclosed) and of course by examining the commit comments.
 
 If you are the author of one of the other repositories - please [contact me](mailto:eyalroz@technion.ac.il) for better coordination of this effort.
 
@@ -22,7 +22,7 @@ If you are the author of one of the other repositories - please [contact me](mai
 
 The Star Schema Benchmark is a modification of the [TPC-H benchmark](http://tpc.org/tpch/), which is the Transaction Processing Council's (older) benchmark for evaluating the performance of Database Management Systems (DBMSes) on analytic queries - that is, queries which do not modify the data.
 
-The TPC-H has various known issues and deficiencies which are beyond the scope of this document. Researchers [Patrick O'Neil](http://www.cs.umb.edu/~poneil/), [Betty O'Neil](http://www.cs.umb.edu/~eoneil/) and [Xuedong Chen](https://www.linkedin.com/in/xuedong-chen-18414ba/), from the University of Massachusats Boston, proposed a modification of the TPC-H benchmark which addresses some of these shortcomings, in several papers, the latest and most relevant being [Star Schema Benchmark, Revision 3](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF) published June 2009. One of the key features of the modifcation is the conversion of the [TPC-H schemata](http://kejser.org/wp-content/uploads/2014/06/image_thumb2.png) to Star Schemata ("Star Schema" is a misnomer), by some denormalizing as well as dropping some of the data; more details appear <a href="#difference-from-tpch">below</a> and even more details in the paper itself.
+The TPC-H has various known issues and deficiencies which are beyond the scope of this document. Researchers [Patrick O'Neil](http://www.cs.umb.edu/~poneil/), [Betty O'Neil](http://www.cs.umb.edu/~eoneil/) and [Xuedong Chen](https://www.linkedin.com/in/xuedong-chen-18414ba/), from the University of Massachusetts Boston, proposed a modification of the TPC-H benchmark which addresses some of these shortcomings, in several papers, the latest and most relevant being [Star Schema Benchmark, Revision 3](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF) published June 2009. One of the key features of the modification is the conversion of the [TPC-H schemata](http://kejser.org/wp-content/uploads/2014/06/image_thumb2.png) to Star Schemata ("Star Schema" is a misnomer), by some denormalizing as well as dropping some of the data; more details appear <a href="#difference-from-tpch">below</a> and even more details in the paper itself.
 
 The benchmark was also accompanied by the initial versions of the code in this repository - a modified utility to generate schema data on which to run the benchmark.
 
@@ -30,42 +30,27 @@ For a recent discussion of the benchmark, you may wish to also read [A Review of
 
 ## <a name="building">Building the generation utility</a>
 
-The build process is not completely automated, unfortunately (an inheritance from the TPC-H dbgen utility), and comprises of two phases: Semi-manually generating a [Makefile](https://en.wikipedia.org/wiki/Makefile), then an automated build using that Makefile.
+The build is automated using [CMake](https://cmake.org/) now. You can run it in several modes:
 
-#### Generating a Makefile
+* Default: `$ cmake . && cmake --build .`
+* Passing options manually: `$ cmake [OPTIONS] . && cmake --build .`
+* Interactive: `$ cmake . && ccmake . && cmake --build .`
 
-Luckily, the Makefile is all-but-written for you, in the form of a template, [`makefile.suite`](https://github.com/eyalroz/ssb-dbgen/blob/master/makefile.suite). What remains for you to do is (assuming a non-Windows system):
+Of course, you should have C language compiler (C99/C2011 support is not necessary), linker, and corresponding make-tool preinstalled in your system. CMake will detect them automatically.
 
-1. Copy `makefile.suite` to `Makefile`
-2. Set the values of the variables `DATABASE`, `MACHINE`, `WORKLOAD` and `CC`:
+Building process was tested using [Travis CI](https://travis-ci.org/) with [gcc](https://gcc.gnu.org/) and [clang](https://clang.llvm.org/) compilers on Ubuntu Linux, with clang on OS X, and with [MSVC](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B) and [MinGW](http://www.mingw.org/) on Windows.
 
-|Variable   |How to set it?   | List of options |
-|-----------|-----------------|-----------------|
-| `DATABASE`  | Use `DB2` if you can't tell what you should use; try one of the other options if that's the DBMS you're going to benchmark with  | `INFORMIX`, `DB2`, `TDAT`, `SQLSERVER`, `SYBASE` |
-| `MACHINE`  | According to the platform/operating system you're using  | `ATT`, `DOS`, `HP`, `IBM`, `ICL`, `MVS`, `SGI`, `SUN`, `U2200`, `VMS`, `LINUX`, `MAC` |
-| `WORKLOAD`  | Use `SSB`   | `SSB`, `TPCH`, `TPCR` (but better not try the last two)
-| `CC`  |  Use the base name of your system's C compiler (assuming it's in the search path)  | N/A |
+#### Available options
+
+| Option | What is it about? | Possible values | Default value |
+|----------|------------------------|----------------------|-------------------|
+| `CMAKE_BUILD_TYPE` | Predefined CMake option. if `Debug`, then build with debugging symbols and without optimizations; if `Release`, then build with optimizations. | `Release`, `Debug` | `Release` |
+| `DATABASE` | DBMS which you are going to benchmark with SSB. This option only affects `qgen`, so if you're only generating data, then you can use default value without worrying. | `INFORMIX`, `DB2`, `TDAT`, `SQLSERVER`, `SYBASE` | `DB2` |
+| `EOL_HANDLING` | If `ON`, then separator is omitted after the last column in all tables.   | `ON`  `OFF` | `OFF` |
+| `WORKLOAD` | As was already mentioned, this generator was created on the base of tpch-dbgen. And formally it supports data generation for TPC-H. But it's strongly recommended to use ssb-dbgen for SSB and tpch-dbgen for TPC-H. | `SSB`, `TPCH` | `SSB` |
 
 <!--2. Set the value of the  variable to `DB2` - or, if you know what you're doing and you have a specific reason to do so, to one of the other databases in the commented list of possibilities.
-3. Set `MACHINE` to the value closest to your platform (mostly commonly it's either `LINUX`, or `MAC`; Windows users - see note below)
-4. Set `WORKLOAD` to `SSB` (theoretically, `TPCH` might also work and generate TPC-H data, but don't count on it)
-5. Set your C compiler invocation string - either the base name if it's on your search path (e.g. `CC=gcc`) or a full pathname otherwise. -->
-
-
-**Notes:** Windows users will need to set additional variables (see `makefile.suite`).
-
-#### Building using the Makefile
-
-Your system should have the following software:
-
-* GNU Make (which is standard on essentially all Unix-like systems today, specifically on Linux distributions), or Microsoft's NMake (which comes bundled with MS Visual Studio).
-* A C language compiler (C99/C2011 support is not necessary) and linker. GNU's compiler collection (gcc) is know to work on Linux; and MSVC probably works on Windows. clang, ICC or others should be ok as well.
-
-Now, simply execute `make -C /path/to/your/ssb-dbgen`; on Windows, you will need to be in the repository's directory and execute `nmake`. If you're in a terminal/command prompt session, the output should have several lines looking something like this:
-```
-gcc -O -DDBNAME=\"dss\" -DLINUX -DDB2  -DSSB    -c -o bm_utils.o bm_utils.c
-```
-and finally, the executable files `dbgen` and `qgen` (or `dbgen.exe` and `qgen.exe` on Windows) should now appear in the source folder.
+3. Set `WORKLOAD` to `SSB` (theoretically, `TPCH` might also work and generate TPC-H data, but don't count on it)  -->
 
 ## <a name="using">Using the utility to generate data</a>
 
@@ -80,24 +65,24 @@ will create all tables in the current directory, with a scale factor of 10. This
 3|Customer#000000003|fkRGN8n|ARGENTINA7|ARGENTINA|AMERICA|11-719-748-3364|AUTOMOBILE|
 4|Customer#000000004|4u58h f|EGYPT    4|EGYPT|MIDDLE EAST|14-128-190-5944|MACHINERY|
 ```
-the fields are separated by a pipe character (`|`), and there's a trailing pipe at the end of the line. 
+the fields are separated by a pipe character (`|`), and if `EOL_HANDLING`was set to `OFF` during building there's a trailing separator at the end of the line. 
 
-After generating `.tbl` files for the CUSTOMER, PART, SUPPLIER, DATE and LINEORDER tables, you should now either load them directly into your DBMS, or apply some textual processing to them before loading.
+After generating `.tbl` files for the CUSTOMER, PART, SUPPLIER, DATE, and LINEORDER tables, you should now either load them directly into your DBMS or apply some textual processing to them before loading.
 
-**Note:** On Unix-like systems, it is also possible to write the generated data into a FIFO filesystem node, reading from the other side with a compression utility, so as to only write compressed data to disk. This may be useful of disk space is limited and you are using a particularly high scale factor.
+**Note:** On Unix-like systems, it is also possible to write the generated data into a FIFO filesystem node, reading from the other side with a compression utility, so as to only write compressed data to disk. This may be useful if disk space is limited and you are using a particularly high scale factor.
 
 <br>
 
 ## <a name="difference-from-tpch">Differences of the generated data from the TPC-H schema</a>
 
 
-For a detailed description of the differences betwen SSB data and its distributions, as well as motivation for the differences, please read the SSB's epoynmous [paper](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF).
+For a detailed description of the differences between SSB data and its distributions, as well as motivation for the differences, please read the SSB's eponymous [paper](http://www.cs.umb.edu/~poneil/StarSchemaB.PDF).
 
 In a nutshell, the differences are as follows:
 
 1. Removed: Snowflake tables such as `NATION` and `REGION`
 2. Removed: The `PARTSUPP` table
-3. Denormalized/Removed: The `ORDERS` table - data is denormaized into `LINEORDER`
+3. Denormalized/Removed: The `ORDERS` table - data is denormalized into `LINEORDER`
 4. Expanded/Modified/Renamed: The fact table `LINEITEM` is now `LINEORDER`; many of its fields have been added/removed, including fields denormalized from the `ORDERS` table.
 5. Added: A `DATE` dimension table
 6. Modified: Removed and added fields in existing dimension tables (e.g. `SUPPLIER`)
