@@ -197,9 +197,9 @@ int		pick_str PROTO((distribution * s, int c, char *target));
 void	agg_str PROTO((distribution *set, long count, long col, char *dest));
 void	read_dist PROTO((char *path, char *name, distribution * target));
 void	embed_str PROTO((distribution *d, int min, int max, int stream, char *dest));
-#ifndef STDLIB_HAS_GETOPT
+#ifndef HAVE_GETOPT
 int		getopt PROTO((int arg_cnt, char **arg_vect, char *options));
-#endif /* STDLIB_HAS_GETOPT */
+#endif /* HAVE_GETOPT */
 long	set_state PROTO((int t, long scale, long procs, long step, long *e));
 
 /* rnd.c */

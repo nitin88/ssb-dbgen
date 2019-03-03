@@ -21,6 +21,10 @@
 #include "tpcd.h"
 #include "permute.h"
 
+#if (!defined(STDLIB_HAS_GETOPT) && defined(HAVE_GETOPT_H))
+#include <getopt.h>
+#endif
+
 
 #define LINE_SIZE 512
 

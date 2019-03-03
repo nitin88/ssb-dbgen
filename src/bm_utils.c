@@ -108,7 +108,6 @@ static char alpha_num[65] =
 #define PROTO(s) ()
 #endif
 
-char     *getenv PROTO((const char *name));
 void usage();
 long *permute_dist(distribution *d, long stream);
 extern long Seed[];
@@ -471,7 +470,7 @@ dsscasecmp(char *s1, char *s2)
     return ((tolower(*s1) < tolower(*s2)) ? -1 : 1);
 }
 
-#ifndef STDLIB_HAS_GETOPT
+#ifndef HAVE_GETOPT
 int optind = 0;
 int opterr = 0;
 char *optarg = NULL;
@@ -533,7 +532,7 @@ getopt(int ac, char **av, char *opt)
         return(*cp);
         }
 }
-#endif /* STDLIB_HAS_GETOPT */
+#endif /* HAVE_GETOPT */
 
 char **
 mk_ascdate(void)
