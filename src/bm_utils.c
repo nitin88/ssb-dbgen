@@ -108,10 +108,6 @@ static char alpha_num[65] =
 #define PROTO(s) ()
 #endif
 
-#ifndef STDLIB_HAS_GETENV
-#error "getenv is required but not found"
-// char     *getenv PROTO((const char *name));
-#endif
 void usage();
 long *permute_dist(distribution *d, long stream);
 extern long Seed[];
@@ -474,7 +470,7 @@ dsscasecmp(char *s1, char *s2)
     return ((tolower(*s1) < tolower(*s2)) ? -1 : 1);
 }
 
-#if (!defined(STDLIB_HAS_GETOPT) && !defined(HAVE_GETOPT_H))
+#ifndef HAVE_GETOPT
 int optind = 0;
 int opterr = 0;
 char *optarg = NULL;
@@ -536,7 +532,7 @@ getopt(int ac, char **av, char *opt)
         return(*cp);
         }
 }
-#endif /* (!defined(STDLIB_HAS_GETOPT) && !defined(HAVE_GETOPT_H)) */
+#endif /* HAVE_GETOPT */
 
 char **
 mk_ascdate(void)

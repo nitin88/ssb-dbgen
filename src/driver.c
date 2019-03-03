@@ -23,13 +23,11 @@
 #include <strings.h>
 #endif
 
-#if defined(STDLIB_HAS_GETOPT)
-/* do nothing */
-#elif defined(HAVE_GETOPT_H)
+#if (!defined(STDLIB_HAS_GETOPT) && defined(HAVE_GETOPT_H))
 #include <getopt.h>
-#else
+#elif (!defined(HAVE_GETOPT))
 int     getopt(int arg_cnt, char **arg_vect, char *options);
-#endif /* defined(STDLIB_HAS_GETOPT) */
+#endif /* (!defined(STDLIB_HAS_GETOPT) && defined(HAVE_GETOPT_H)) */
 
 #ifdef HAVE_SYS_TYPES_H
 	#include <sys/types.h>

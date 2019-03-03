@@ -82,6 +82,10 @@
 #cmakedefine STDLIB_HAS_GETOPT
 #cmakedefine STDLIB_HAS_GETENV
 
+#if (defined(STDLIB_HAS_GETOPT) || defined(HAVE_GETOPT_H))
+    #define HAVE_GETOPT
+#endif
+
 #cmakedefine01 HAVE_GETPID
 #if (HAVE_GETPID == 1)
 #define DSS_PROC getpid()
