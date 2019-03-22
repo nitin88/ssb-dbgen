@@ -853,7 +853,7 @@ process_options (int count, char **vector)
 				  scale = 1;
 				  for (i = PART; i < REGION; i++)
 				  {
-					  tdefs[i].base *= flt_scale;
+					  tdefs[i].base = (long) (tdefs[i].base * flt_scale);
 					  if (tdefs[i].base < 1)
 						  tdefs[i].base = 1;
 				  }
@@ -1167,7 +1167,7 @@ main (int ac, char **av)
 					rowcnt = tdefs[i].base;
 #ifdef SSB
 				if(i==PART){
-					rowcnt = tdefs[i].base * (floor(1+log((double)(scale))/(log(2))));
+					rowcnt = (DSS_HUGE) (tdefs[i].base * (floor(1+log((double)(scale))/(log(2)))));
 				}
 				if(i==DATE){
 					rowcnt = tdefs[i].base;

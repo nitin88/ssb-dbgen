@@ -117,7 +117,7 @@
 #define  MK_SPARSE(key, seq) \
          (((((key>>3)<<2)|(seq & 0x0003))<<3)|(key & 0x0007))
 
-#define RANDOM(tgt, lower, upper, stream)	dss_random(&tgt, lower, upper, stream)
+#define RANDOM(tgt, lower, upper, stream)	dss_random(&tgt, (long) lower, (long) upper, (long) stream)
 #ifdef SSB
 typedef struct{
   char * name;
@@ -557,7 +557,7 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 // #ifdef SUPPORT_64BITS
 // #define  VRF_HUGE(t,d)	tdefs[t].vtotal = *((DSS_HUGE *)&d) + *((DSS_HUGE *)(&d + 1))
 // #else
-#define VRF_HUGE(t,d)	tdefs[t].vtotal += d[0] + d[1]
+#define VRF_HUGE(t,d)	tdefs[t].vtotal += (unsigned long) (d[0] + d[1])
 // #endif /* SUPPORT_64BITS */
 /* assume float is a 64 bit quantity */
 #define  VRF_MONEY(t,d)	tdefs[t].vtotal = *((long *)&d) + *((long *)(&d + 1))
