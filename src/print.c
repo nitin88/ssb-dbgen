@@ -656,7 +656,16 @@ int pr_date(date_t *d, int mode){
 	d_fp = print_prep(DATE, 0);
 
     PR_STRT(d_fp);
-    PR_INT(d_fp, d->datekey);
+    char formatted_date[DATE_LEN];
+#if __GNUC__ >= 8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
+    PR_DATE(formatted_date, d->year-1900, d->monthnuminyear, d->daynuminmonth);
+#if __GNUC__ >= 8
+#pragma GCC diagnostic pop
+#endif
+    PR_STR(d_fp, formatted_date, DATE_LEN);
     PR_STR(d_fp, d->date,D_DATE_LEN);
     PR_STR(d_fp, d->dayofweek,D_DAYWEEK_LEN);
     PR_STR(d_fp, d->month,D_MONTH_LEN);

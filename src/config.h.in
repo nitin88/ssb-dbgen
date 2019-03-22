@@ -5,7 +5,7 @@
  * 
  * The following #defines will effect the code:
  *   SEPARATOR         -- character used to separate fields in flat files
- *   MDY_DATE          -- generate dates as MM-DD-YY
+ *   YMD_DASH_DATE     -- Generate date values in YYYY-MM-DD format (with dashes) rather than YYYYMMDD
  *   WIN32             -- support for WindowsNT
  *   DSS_HUGE          -- 64 bit data type
  *   HUGE_FORMAT       -- printf string for 64 bit data type
