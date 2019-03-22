@@ -702,9 +702,6 @@ mk_date(long index,date_t *d)
     strncpy(d->month,month_names[d->monthnuminyear-1],D_MONTH_LEN+1);
 #if __GNUC__ >= 8
 #pragma GCC diagnostic pop
-#else
-    strncpy(d->dayofweek, weekday_names[d->daynuminweek-1],D_DAYWEEK_LEN+1);
-    strncpy(d->month,month_names[d->monthnuminyear-1],D_MONTH_LEN+1);
 #endif
     d->year=(long)localTime->tm_year + 1900;
     d->daynuminmonth=(long)localTime->tm_mday;

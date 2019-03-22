@@ -522,7 +522,7 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 
 
 #ifdef SSB
-#ifdef YMD_DATE
+#ifdef YMD_DASH_DATE
 #define  PR_DATE(tgt, yr, mn, dy) { \
 	int yr_  = yr; \
 	int mn_  = mn; \
@@ -538,22 +538,12 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 }
 #endif
 #else
-#ifdef MDY_DATE
-#define  PR_DATE(tgt, yr, mn, dy) { \
-	int yr_  = yr; \
-	int mn_  = mn; \
-	int dy_  = dy; \
-	snprintf(tgt, 2+1+2+1+4+1, "%02d-%02d-19%02d", mn_, dy_, yr_) \
-}
-
-#else
 #define  PR_DATE(tgt, yr, mn, dy) { \
 	int yr_  = yr; \
 	int mn_  = mn; \
 	int dy_  = dy; \
 	snprintf(tgt, 2+1+2+1+4+1, "%02d-%02d-19%02d", yr_, mn_, dy_) \
 }
-#endif /* DATE_FORMAT */
 #endif
 
 /*
