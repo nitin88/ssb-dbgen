@@ -6,7 +6,7 @@ Package build status on Travis CI: [![Build Status](https://travis-ci.org/eyalro
 
 | Table of contents|
 |:----------------|
-| ["What? _Another_ fork of ssb-dbgen? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>[Trouble building/running](#trouble)<br> |
+| ["What? _Another_ fork of ssb-dbgen? Why?"](#another-fork)<br>  [About the Star Schema Benchmark](#about-ssb)<br> [Building the generation utility](#building)<br> [Using the utility to generate data](#using)<br> [Differences of the generated data from the TPC-H schema](#difference-from-tpch)<br>[Trouble building/running?](#trouble)<br> |
 
 ## <a name="another-fork">"What? _Another_ fork of ssb-dbgen? Why?"</a>
 
