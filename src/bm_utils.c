@@ -19,6 +19,8 @@
  * set_state() -- initialize the RNG
  */
 
+#include "config.h"
+
 /*this has to be put on top...*/
 #ifdef LINUX
 /* turn on GNU extensions, incl O_DIRECT */
@@ -31,29 +33,38 @@
 #include <time.h>
 #include <errno.h>
 #include <string.h>
+#include <ctype.h>
+#include <math.h>
 
 #ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif 
-#include <ctype.h>
-#include <math.h>
-#ifdef _POSIX_C_SOURCE
+
+#ifdef HAVE_MALLOC_IN_STDLIB
 #include <stdlib.h>
-#else
-#ifdef HAVE_MALLOC_H
+#elif defined(HAVE_MALLOC_H)
 #include <malloc.h>
 #else
 #error "No place to get the malloc() definition from."
-#endif /* HAVE_MALLOC_H */
-#endif /* _POSIX_C_SOURCE */
+#endif /* HAVE_MALLOC_IN_STDLIB */
 
+
+#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
+#endif /* HAVE_FCNTL_H */
+
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_SYS_STAT_H
+#include <sys/stat.h>
+#endif
 
 #ifdef IBM
 #include <sys/mode.h>
 #endif /* IBM */
-#include <sys/types.h>
-#include <sys/stat.h>
+
 /* Lines added by Chuck McDevitt for WIN32 support */
 #if	(defined(WIN32)||defined(DOS))
 #ifndef _POSIX_C_SOURCE
@@ -97,7 +108,6 @@ static char alpha_num[65] =
 #define PROTO(s) ()
 #endif
 
-char     *getenv PROTO((const char *name));
 void usage();
 long *permute_dist(distribution *d, long stream);
 extern long Seed[];
@@ -125,14 +135,14 @@ yes_no(char *prompt)
 {
     char      reply[128];
 
-#ifdef WIN32
+#ifdef _MSC_VER 
 /* Disable warning about conditional expression is constant */ 
 #pragma warning(disable:4127)
 #endif 
 
     while (1)
         {
-#ifdef WIN32
+#ifdef _MSC_VER 
 #pragma warning(default:4127)
 #endif 
         printf("%s [Y/N]: ", prompt);
@@ -196,7 +206,7 @@ e_str(distribution *d, int min, int max, int stream, char *dest)
     pick_str(d, stream, strtmp);
     len = strlen(strtmp);
     RANDOM(loc, 0, (strlen(dest) - 1 - len), stream);
-    strncpy(dest + loc, strtmp, len);
+    memcpy(dest + loc, strtmp, len);
 
     return;
 }
@@ -247,14 +257,14 @@ julian(long date)
     offset = date - STARTDATE;
     result = STARTDATE;
 
-#ifdef WIN32
+#ifdef _MSC_VER
 /* Disable warning about conditional expression is constant */ 
 #pragma warning(disable:4127)
 #endif 
 
     while (1)
         {
-#ifdef WIN32 
+#ifdef _MSC_VER
 #pragma warning(default:4127)
 #endif 
         yr = result / 1000;
@@ -460,7 +470,7 @@ dsscasecmp(char *s1, char *s2)
     return ((tolower(*s1) < tolower(*s2)) ? -1 : 1);
 }
 
-#ifndef STDLIB_HAS_GETOPT
+#ifndef HAVE_GETOPT
 int optind = 0;
 int opterr = 0;
 char *optarg = NULL;
@@ -522,7 +532,7 @@ getopt(int ac, char **av, char *opt)
         return(*cp);
         }
 }
-#endif /* STDLIB_HAS_GETOPT */
+#endif /* HAVE_GETOPT */
 
 char **
 mk_ascdate(void)

@@ -117,7 +117,7 @@
 #define  MK_SPARSE(key, seq) \
          (((((key>>3)<<2)|(seq & 0x0003))<<3)|(key & 0x0007))
 
-#define RANDOM(tgt, lower, upper, stream)	dss_random(&tgt, lower, upper, stream)
+#define RANDOM(tgt, lower, upper, stream)	dss_random(&tgt, (long) lower, (long) upper, (long) stream)
 #ifdef SSB
 typedef struct{
   char * name;
@@ -197,9 +197,9 @@ int		pick_str PROTO((distribution * s, int c, char *target));
 void	agg_str PROTO((distribution *set, long count, long col, char *dest));
 void	read_dist PROTO((char *path, char *name, distribution * target));
 void	embed_str PROTO((distribution *d, int min, int max, int stream, char *dest));
-#ifndef STDLIB_HAS_GETOPT
-int		getopt PROTO((int arg_cnt, char **arg_vect, char *oprions));
-#endif /* STDLIB_HAS_GETOPT */
+#ifndef HAVE_GETOPT
+int		getopt PROTO((int arg_cnt, char **arg_vect, char *options));
+#endif /* HAVE_GETOPT */
 long	set_state PROTO((int t, long scale, long procs, long step, long *e));
 
 /* rnd.c */
@@ -522,21 +522,21 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 
 
 #ifdef SSB
+#ifdef YMD_DASH_DATE
+#define  PR_DATE(tgt, yr, mn, dy) { \
+	int yr_  = yr; \
+	int mn_  = mn; \
+	int dy_  = dy; \
+  snprintf(tgt, 2+1+2+1+4+1, "19%02d-%02d-%02d",yr_, mn_, dy_); \
+}
+#else
 #define  PR_DATE(tgt, yr, mn, dy) { \
 	int yr_  = yr; \
 	int mn_  = mn; \
 	int dy_  = dy; \
 	snprintf(tgt, 4+2+2+1, "19%02d%02d%02d", yr_, mn_, dy_); \
 }
-#else
-#ifdef MDY_DATE
-#define  PR_DATE(tgt, yr, mn, dy) { \
-	int yr_  = yr; \
-	int mn_  = mn; \
-	int dy_  = dy; \
-	snprintf(tgt, 2+1+2+1+4+1, "%02d-%02d-19%02d", mn_, dy_, yr_) \
-}
-
+#endif
 #else
 #define  PR_DATE(tgt, yr, mn, dy) { \
 	int yr_  = yr; \
@@ -544,7 +544,6 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
 	int dy_  = dy; \
 	snprintf(tgt, 2+1+2+1+4+1, "%02d-%02d-19%02d", yr_, mn_, dy_) \
 }
-#endif /* DATE_FORMAT */
 #endif
 
 /*
@@ -552,11 +551,14 @@ int dbg_print(int dt, FILE *tgt, void *data, int len, int eol);
  */
 #define  VRF_STR(t, d) {char *xx = d; while (*xx) tdefs[t].vtotal += *xx++;}
 #define  VRF_INT(t,d)  tdefs[t].vtotal += d
-#ifdef SUPPORT_64BITS
-#define  VRF_HUGE(t,d)	tdefs[t].vtotal = *((long *)&d) + *((long *)(&d + 1))
-#else
-#define VRF_HUGE(t,d)	tdefs[t].vtotal += d[0] + d[1]
-#endif /* SUPPORT_64BITS */
+/* The following conditional definition is not necessary by this point, since
+ * d is already a DSS_HUGE in the contexts in which this macro is expanded.
+ */
+// #ifdef SUPPORT_64BITS
+// #define  VRF_HUGE(t,d)	tdefs[t].vtotal = *((DSS_HUGE *)&d) + *((DSS_HUGE *)(&d + 1))
+// #else
+#define VRF_HUGE(t,d)	tdefs[t].vtotal += (unsigned long) (d[0] + d[1])
+// #endif /* SUPPORT_64BITS */
 /* assume float is a 64 bit quantity */
 #define  VRF_MONEY(t,d)	tdefs[t].vtotal = *((long *)&d) + *((long *)(&d + 1))
 #define  VRF_CHR(t,d)	tdefs[t].vtotal += d

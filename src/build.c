@@ -1,23 +1,23 @@
 /* @(#)build.c	2.1.8.1 */
 /* Sccsid:     @(#)build.c	9.1.1.17     11/15/95  12:52:28 */
 /* stuff related to the customer table */
+
+#include "config.h"
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
+
 #ifdef SSB
 #include <time.h>
 #endif
-#ifndef VMS
+
+#ifdef HAVE_SYS_TYPES_H // #ifndef VMS originally
 #include <sys/types.h>
-#endif
-#if defined(SUN)
-#include <unistd.h>
-#endif
+#endif /* HAVE_SYS_TYPES_H */
 
-#if defined(LINUX)
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
-#include <math.h>
+#endif /* HAVE_UNISTD_H */
 
 #include "dss.h"
 #include "dsstypes.h"
@@ -176,7 +176,7 @@ ez_sparse(long i, DSS_HUGE *ok, long seq)
 void
 hd_sparse(long i, DSS_HUGE *ok, long seq)
 	{
-	long low_mask, seq_mask;
+	DSS_HUGE low_mask, seq_mask;
 	static int init = 0;
 	static DSS_HUGE *base, *res;
 	
@@ -694,8 +694,15 @@ mk_date(long index,date_t *d)
     /*make Sunday be the first day of a week */
     d->daynuminweek=((long)localTime->tm_wday+1)%7+1;
     d->monthnuminyear=(long)localTime->tm_mon+1;
+#if __GNUC__ >= 8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-truncation"
+#endif
     strncpy(d->dayofweek, weekday_names[d->daynuminweek-1],D_DAYWEEK_LEN+1);
     strncpy(d->month,month_names[d->monthnuminyear-1],D_MONTH_LEN+1);
+#if __GNUC__ >= 8
+#pragma GCC diagnostic pop
+#endif
     d->year=(long)localTime->tm_year + 1900;
     d->daynuminmonth=(long)localTime->tm_mday;
     d->yearmonthnum=d->year * 100 + d->monthnuminyear;

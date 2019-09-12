@@ -1,33 +1,29 @@
 /* @(#)print.c	2.1.8.2 */
 /* generate flat files for data load */
+
+#include "config.h"
 #include <stdio.h>
-#ifndef VMS
-#include <sys/types.h>
-#endif
-
-#if defined(SUN)
-#include <unistd.h>
-#endif
-
-#if defined(LINUX)
-#include <unistd.h>
-#endif /*LINUX*/
-
 #include <math.h>
+#include <time.h>
+#include <string.h>
+
+#ifdef HAVE_SYS_TYPES_H // originally #ifndef VMS
+#include <sys/types.h>
+#endif /* HAVE_SYS_TYPES_H */
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif /* HAVE_UNISTD_H */
 
 #include "dss.h"
 #include "dsstypes.h"
-#include <string.h>
-
-#include <stdio.h>
-#include <time.h>
 
 
 /*
  * Function Prototypes
  */
 FILE *print_prep PROTO((int table, int update));
-int pr_drange PROTO((int tbl, long min, long cnt, long num));
+int pr_drange PROTO((int tbl, DSS_HUGE min, DSS_HUGE cnt, long num));
 
 FILE *
 print_prep(int table, int update)
@@ -550,9 +546,9 @@ static FILE *fp = NULL;
  * oversight
  */
 int
-pr_drange(int tbl, long min, long cnt, long num)
+pr_drange(int tbl, DSS_HUGE min, DSS_HUGE cnt, long num)
 {
-    static int  last_num = 0;
+    static long  last_num = 0;
     static FILE *dfp = NULL;
     int child = -1;
     long start, last, new;
@@ -660,7 +656,16 @@ int pr_date(date_t *d, int mode){
 	d_fp = print_prep(DATE, 0);
 
     PR_STRT(d_fp);
-    PR_INT(d_fp, d->datekey);
+    char formatted_date[DATE_LEN];
+#if __GNUC__ >= 8
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
+    PR_DATE(formatted_date, d->year-1900, d->monthnuminyear, d->daynuminmonth);
+#if __GNUC__ >= 8
+#pragma GCC diagnostic pop
+#endif
+    PR_STR(d_fp, formatted_date, DATE_LEN);
     PR_STR(d_fp, d->date,D_DATE_LEN);
     PR_STR(d_fp, d->dayofweek,D_DAYWEEK_LEN);
     PR_STR(d_fp, d->month,D_MONTH_LEN);

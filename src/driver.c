@@ -6,30 +6,49 @@
 #define NO_LFUNC (long (*) ()) NULL		/* to clean up tdefs */
 
 #include "config.h"
-#include <stdlib.h>
-#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )		/* Change for Windows NT */
-#ifndef DOS
-#include <unistd.h>
-#include <sys/wait.h>
-#endif
+#if (defined(HAVE_FORK) && defined(HAVE_WAIT) && defined(HAVE_KILL))
+#define CAN_PARALLELIZE_DATA_GENERATION
+#endif /* (defined(HAVE_FORK) && defined(HAVE_WAIT) && defined(HAVE_KILL)) */
 
-#endif /* WIN32 */
-#include <stdio.h>				/* */
+#include <stdlib.h>
+#include <stdio.h>
 #include <limits.h>
 #include <math.h>
 #include <ctype.h>
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
+
 #ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif
-/* TODO: Do we really need al of these Windows-specifi definitions? */
-#if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
+
+#if (!defined(STDLIB_HAS_GETOPT) && defined(HAVE_GETOPT_H))
+#include <getopt.h>
+#elif (!defined(HAVE_GETOPT))
+int     getopt(int arg_cnt, char **arg_vect, char *options);
+#endif /* (!defined(STDLIB_HAS_GETOPT) && defined(HAVE_GETOPT_H)) */
+
+#ifdef HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#ifdef HAVE_SYS_WAIT_H
+#include <sys/wait.h>
+#endif
+
+#if (defined(HAVE_PROCESS_H) && defined(HAVE_WINDOWS_H)) // Windows system
+/* TODO: Do we really need all of these Windows-specific definitions? */
 #include <process.h>
+#ifdef _MSC_VER
 #pragma warning(disable:4201)
 #pragma warning(disable:4214)
 #pragma warning(disable:4514)
+#endif
 #define WIN32_LEAN_AND_MEAN
 #define NOATOM
 #define NOGDICAPMASKS
@@ -47,10 +66,11 @@
 #define NOKANJI
 #define NOMCX
 
-#include "windows.h"
-
+#include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(default:4201)
 #pragma warning(default:4214)
+#endif
 #endif
 
 #include "dss.h"
@@ -66,15 +86,16 @@ int		prep_direct (char *);
 int		close_direct (void);
 void	kill_load (void);
 int		pload (int tbl);
-void	gen_tbl (int tnum, long start, long count, long upd_num);
-int		pr_drange (int tbl, long min, long cnt, long num);
+void	gen_tbl (int tnum, DSS_HUGE start, DSS_HUGE count, long upd_num);
+int		pr_drange (int tbl, DSS_HUGE min, DSS_HUGE cnt, long num);
 int		set_files (int t, int pload);
 int		partial (int, int);
 
 
 extern int optind, opterr;
 extern char *optarg;
-long rowcnt = 0, minrow = 0, upd_num = 0;
+DSS_HUGE rowcnt = 0, minrow = 0;
+long upd_num = 0;
 double flt_scale;
 #if ( defined(WIN32) && !defined(_POSIX_C_SOURCE) )
 char *spawn_args[25];
@@ -287,7 +308,7 @@ stop_proc (int signum)
  * have been tested or even built on non-Linux platforms.
  */
 
-#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )
+#ifdef HAVE_KILL
 
 void
 kill_load (void)
@@ -385,7 +406,7 @@ load_dists (void)
 * generate a particular table
 */
 void
-gen_tbl (int tnum, long start, long count, long upd_num)
+gen_tbl (int tnum, DSS_HUGE start, DSS_HUGE count, long upd_num)
 {
 	static order_t o;
 	supplier_t supp;
@@ -398,7 +419,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 #endif
 	static int completed = 0;
 	static int init = 0;
-	long i;
+	DSS_HUGE i;
 
 	int rows_per_segment=0;
 	int rows_this_segment=-1;
@@ -534,7 +555,7 @@ gen_tbl (int tnum, long start, long count, long upd_num)
 		row_stop(tnum);
 		if (set_seeds && (i % tdefs[tnum].base) < 2)
 		{
-			printf("\nSeeds for %s at rowcount %ld\n", tdefs[tnum].comment, i);
+			printf("\nSeeds for %s at rowcount " HUGE_FORMAT "\n", tdefs[tnum].comment, i);
 			dump_seeds(tnum);
 		}
 	}
@@ -653,8 +674,7 @@ partial (int tbl, int s)
  * even built on non-Linux platforms.
  */
 
-#if ( defined(_POSIX_C_SOURCE) || !defined(WIN32) )
-
+#ifdef CAN_PARALLELIZE_DATA_GENERATION
 int
 pload (int tbl)
 {
@@ -721,7 +741,7 @@ pload (int tbl)
 		fprintf (stderr, "done\n");
 	return (0);
 }
-#endif /* ( defined(_POSIX_C_SOURCE) || !defined(WIN32) ) */
+#endif /* CAN_PARALLELIZE_DATA_GENERATION */
 
 
 void
@@ -833,7 +853,7 @@ process_options (int count, char **vector)
 				  scale = 1;
 				  for (i = PART; i < REGION; i++)
 				  {
-					  tdefs[i].base *= flt_scale;
+					  tdefs[i].base = (long) (tdefs[i].base * flt_scale);
 					  if (tdefs[i].base < 1)
 						  tdefs[i].base = 1;
 				  }
@@ -938,8 +958,7 @@ process_options (int count, char **vector)
 /*
 * MAIN
 *
-* assumes the existance of getopt() to clean up the command 
-* line handling
+* using getopt() to clean up the command line handling
 */
 int
 main (int ac, char **av)
@@ -1120,14 +1139,7 @@ main (int ac, char **av)
 					else
 						partial (i, step);
 				}
-#ifndef _POSIX_C_SOURCE
-				else
-				{
-					fprintf (stderr,
-						"Parallel load is not supported on your platform.\n");
-					exit (1);
-				}
-#else
+#ifdef CAN_PARALLELIZE_DATA_GENERATION
 				else
 				{
 					if (validate)
@@ -1135,9 +1147,16 @@ main (int ac, char **av)
 						INTERNAL_ERROR("Cannot validate parallel data generation");
 					}
 					else
-						pload (i);
+						pload(i);
 				}
-#endif /* _POSIX_C_SOURCE */
+#else
+				else
+				{
+					fprintf(stderr,
+						"Parallel load is not supported on your platform currently.\n");
+					exit(1);
+				}
+#endif /* CAN_PARALLELIZE_DATA_GENERATION */
 			}
 			else
 			{
@@ -1148,7 +1167,7 @@ main (int ac, char **av)
 					rowcnt = tdefs[i].base;
 #ifdef SSB
 				if(i==PART){
-					rowcnt = tdefs[i].base * (floor(1+log((double)(scale))/(log(2))));
+					rowcnt = (DSS_HUGE) (tdefs[i].base * (floor(1+log((double)(scale))/(log(2)))));
 				}
 				if(i==DATE){
 					rowcnt = tdefs[i].base;
@@ -1171,14 +1190,4 @@ main (int ac, char **av)
 			
 		return (0);
 }
-
-
-
-
-
-
-
-
-
-
 
