@@ -17,6 +17,7 @@
 #include <stdio.h>				/* */
 #include <limits.h>
 #include <math.h>
+#include <sys/types.h>
 #include <ctype.h>
 #include <signal.h>
 #include <string.h>
