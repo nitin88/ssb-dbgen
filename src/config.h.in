@@ -1,29 +1,18 @@
 /* 
- * this file allows the compilation of DBGEN to be tailored to specific
- * architectures and operating systems. Some options are grouped 
- * together to allow easier compilation on a given vendor's hardware.
- * 
- * The following #defines will effect the code:
+ * An explanations of some of the #define's added by this file (that 
+ * don't directly originate from CMake configuration choices):
  *   SEPARATOR         -- character used to separate fields in flat files
- *   YMD_DASH_DATE     -- Generate date values in YYYY-MM-DD format (with dashes) rather than YYYYMMDD
- *   WIN32             -- support for WindowsNT
  *   DSS_HUGE          -- 64 bit data type
  *   HUGE_FORMAT       -- printf string for 64 bit data type
  *   HUGE_COUNT        -- number of objects in DSS_HUGE
- *   EOL_HANDLING      -- flat files don't need final column separator
  *   DSS_PROC          -- a process-id-based random seeding factor
  *
- *   DATABASE defines
- *   ================
- *   DB2        -- use DB2 dialect in QGEN
- *   INFORMIX   -- use Informix dialect in QGEN
- *   SQLSERVER  -- use SQLSERVER dialect in QGEN
- *   SYBASE     -- use Sybase dialect in QGEN
+ * DATABASE values, explained:
+ *   DB2        -- use the IBM DB2 dialect in QGEN
+ *   INFORMIX   -- use the Informix dialect in QGEN
+ *   SQLSERVER  -- use the Microsoft SQL Server dialect in QGEN
+ *   SYBASE     -- use the Sybase dialect in QGEN
  *   TDAT       -- use Teradata dialect in QGEN
- *
- *   WORKLOAD defines
- *   ================
- *   TPCH              -- make will create TPCH (set in makefile)
  */
 
 /* POSIX platform headers */
@@ -48,18 +37,22 @@
 #define RNG_TEST
 #define _FILE_OFFSET_BITS 64
 
+/* SIZEOF_LONG check */
 #if (@SIZEOF_LONG@ == 8)
 #define SIGNED_64_BIT_C_TYPE long
 #define SIGNED_64_BIT_PRINTF_MODIFIER "l"
 #else
+/* SIZEOF_LONG_LONG check */
 #if (@SIZEOF_LONG_LONG@ == 8)
 #define SIGNED_64_BIT_C_TYPE long long
 #define SIGNED_64_BIT_PRINTF_MODIFIER "ll"
 #else
+/* SIZEOF_SHORT check */
 #if (@SIZEOF_SHORT@ == 8)
 #define SIGNED_64_BIT_C_TYPE short
 #define SIGNED_64_BIT_PRINTF_MODIFIER "s"
 #else
+/* SIZEOF_INT check */
 #if (@SIZEOF_INT@ == 8)
 #define SIGNED_64_BIT_C_TYPE int
 #define SIGNED_64_BIT_PRINTF_MODIFIER
@@ -77,6 +70,20 @@
 #define HUGE_FORMAT       "%" HUGE_FORMAT_SPECIFIER
 #define HUGE_COUNT        1
 #define HUGE_DATE_FORMAT  "%02" HUGE_FORMAT_SPECIFIER
+
+#cmakedefine01 CSV_OUTPUT_FORMAT
+#if CSV_OUTPUT_FORMAT 
+#define SEPARATOR ',' /* field spearator for generated flat files */
+#define DOUBLE_QUOTE_OUTPUT_STRINGS /* In the SSB data set, we may have commas in strings, so let's enclose (all of) them in quotes. */
+#ifndef EOL_HANDLING
+#define EOL_HANDLING /* Note: This should already be defined by CMake; only "emphasizing" here */
+#endif
+#else
+#define SEPARATOR '|'
+#endif
+
+#cmakedefine EOL_HANDLING
+#cmakedefine YMD_DASH_DATE
 
 #cmakedefine HAVE_GETOPT_H
 #cmakedefine STDLIB_HAS_GETOPT
@@ -109,33 +116,6 @@
 #if (!defined(HAVE_UNISTD_H) && !defined(HAVE_PID_T_IN_SYS_TYPES_H))
 	typedef int pid_t;
 #endif
-
-/*
- * The following commented-out macros appeared in the original ssb-dbgen
- * code, but were not being used, with parallel load only made possible for
- * POSIX-compatible systems (using fork, kill and wait).
- */
-//-----
-//#if (defined(HAVE_UNISTD_H) && defined(HAVE_SYS_WAIT_H))
-//#define KILL(pid) kill(SIGUSR1, pid)
-//#define SET_HANDLER(proc) signal(SIGUSR1, proc)
-//#define SPAWN   fork
-//#define WAIT(res, pid) wait(res)
-//#else
-//#define SET_HANDLER(proc) signal(SIGINT, proc)
-//#define KILL(pid) TerminateProcess(OpenProcess(PROCESS_TERMINATE,FALSE,pid),3)
-//
-//#if (defined (__WATCOMC__))
-//#define SPAWN()   spawnv(P_NOWAIT, spawn_args[0], spawn_args)
-//#define WAIT(res, pid) cwait(res, pid, WAIT_CHILD)
-//#else /* MSVC (?) */
-//#define SPAWN()   _spawnv(_P_NOWAIT, spawn_args[0], spawn_args)
-//#define WAIT(res, pid) _cwait(res, pid, _WAIT_CHILD)
-//#define getpid          _getpid
-//#endif /* (defined (__WATCOMC__)) */
-//#endif /* (defined(HAVE_UNISTD_H) && defined(HAVE_SYS_WAIT_H)) */
-//-----
-
 
 #ifdef _MSC_VER
 

@@ -5,10 +5,8 @@ include(CheckTypeSize)
 include(CheckSymbolExists)
 include(CheckFunctionExists)
 
-
 project(ssb-dbgen # SSB benchmark data (and query) generator utilities
 	LANGUAGES C)
-
 
 if (NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
 	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
@@ -22,8 +20,13 @@ set_property(CACHE DATABASE PROPERTY STRINGS INFORMIX DB2 TDAT SQLSERVER SYBASE)
 set(WORKLOAD SSB CACHE STRING "Choice of benchmark / query workload (\"WORKLOAD\")")
 set_property(CACHE WORKLOAD PROPERTY STRINGS TPCH SSB)
 
+set(CSV_OUTPUT_FORMAT OFF CACHE BOOL "Use CSV output format")
 set(EOL_HANDLING OFF CACHE BOOL "Skip separator after the last field in generated lines?")
 set(YMD_DASH_DATE OFF CACHE BOOL "Generate date values in YYYY-MM-DD format (with dashes) rather than YYYYMMDD")
+
+if (CSV_OUTPUT_FORMAT AND NOT EOL_HANDLING)
+	message(WARNING "When CSV is used for the output format, EOL_HANDLING is ignored and a separator is _never_ printed after the last field on the line (the equivalent of EOL_HANDLING being ON).")
+endif()
 
 check_type_size("long long" SIZEOF_LONG_LONG)
 check_type_size("long" SIZEOF_LONG)
@@ -156,13 +159,6 @@ set_property(
 		${WORKLOAD}
 		_FILE_OFFSET_BITS=64
 )
-
-if (EOL_HANDLING)
-	set_property( TARGET dbgen qgen APPEND PROPERTY COMPILE_DEFINITIONS EOL_HANDLING)
-endif()
-if (YMD_DASH_DATE)
-	set_property( TARGET dbgen qgen APPEND PROPERTY COMPILE_DEFINITIONS YMD_DASH_DATE)
-endif()
 
 set_property(TARGET dbgen qgen APPEND PROPERTY C_STANDARD 99)
 set_property(TARGET dbgen qgen APPEND PROPERTY C_EXTENSIONS OFF)

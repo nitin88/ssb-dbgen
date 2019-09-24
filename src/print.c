@@ -81,9 +81,15 @@ dbg_print(int format, FILE *target, void *data, int len, int sep)
 	{
 	case DT_STR:
 		if (columnar)
+			/* Note: Columnar output cannot be in CSV format, */
+			/* so there's no sense in quoting the string.     */
 			fprintf(target, "%-*s", len, (char *)data);
 		else
+#ifdef DOUBLE_QUOTE_OUTPUT_STRINGS
+			fprintf(target, "\"%s\"", (char *)data);
+#else
 			fprintf(target, "%s", (char *)data);
+#endif
 		break;
 #ifdef MVS
 	case DT_VSTR:

@@ -45,9 +45,10 @@ Building process was tested using [Travis CI](https://travis-ci.org/) with [gcc]
 | Option | What is it about? | Possible values | Default value |
 |----------|------------------------|----------------------|-------------------|
 | `CMAKE_BUILD_TYPE` | Predefined CMake option. if `Debug`, then build with debugging symbols and without optimizations; if `Release`, then build with optimizations. | `Release`, `Debug` | `Release` |
-| `WORKLOAD` | As was already mentioned, this generator was created on the base of tpch-dbgen. And formally it supports data generation for TPC-H. But it's strongly recommended to use ssb-dbgen for SSB and tpch-dbgen for TPC-H. | `SSB`, `TPCH` | `SSB` |
 | `DATABASE` | DBMS which you are going to benchmark with SSB. This option only affects `qgen`, so if you're only generating data, let it stay at its default value . | `INFORMIX`, `DB2`, `TDAT`, `SQLSERVER`, `SYBASE` | `DB2` |
 | `EOL_HANDLING` | If `ON`, then separator is omitted after the last column in all tables.   | `ON`  `OFF` | `OFF` |
+| `CSV_OUTPUT_FORMAT` |  Adhere to the CSV format for the output, i.e. use commans (`,`) as a field separator, and enclose strings in double-quotes to ensure any commas within them aren't mis-interpreted. | `ON` `OFF` | `OFF` |
+| `WORKLOAD` | As was already mentioned, this generator was created on the base of tpch-dbgen. And formally it supports data generation for TPC-H. But it's strongly recommended to use ssb-dbgen for SSB and tpch-dbgen for TPC-H. | `SSB`, `TPCH` | `SSB` |
 | `YMD_DASH_DATE` | When set to `ON`, generates dates with dashes between fields, i.e. `YYYY-MM-DD`; when set to `OFF`, no dashes are included, e.g. `YYYYMMDD`  | `ON`, `OFF` | `OFF` |
 
 
