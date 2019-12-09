@@ -254,7 +254,7 @@ printf("Copyright %s %s\n", TPC, C_DATES);
 printf("USAGE: %s <options> [ queries ]\n", prog);
 printf("Options:\n");
 printf("\t-a\t\t-- use ANSI semantics.\n");
-printf("\t-b <str>\t-- load distributions from <str>\n");
+printf("\t-b <str>\t-- load distributions from file <str> (default: " DIST_DFLT ")\n");
 printf("\t-c\t\t-- retain comments found in template.\n");
 printf("\t-d\t\t-- use default substitution values.\n");
 printf("\t-h\t\t-- print this usage summary.\n");

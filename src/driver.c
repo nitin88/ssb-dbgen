@@ -587,7 +587,7 @@ usage (void)
 		"dbgen [-v] [-O {dfhmr}] [-s <scale>]",
 		"[-U <updates>] [-r <percent>]");
 #endif
-	fprintf (stderr, "-b <s> -- load distributions for <s>\n");
+	fprintf (stderr, "-b <s> -- load distributions from file <s> (default: " DIST_DFLT ")\n");
 	fprintf (stderr, "-C <n> -- use <n> processes to generate data\n");
 	fprintf (stderr, "          [Under DOS, must be used with -S]\n");
 	fprintf (stderr, "-D     -- do database load in line\n");
@@ -604,8 +604,7 @@ usage (void)
 	fprintf (stderr, "-O r   -- generate key ranges for deletes.\n");
 	fprintf (stderr, "-O v   -- Verify data set without generating it.\n");
 	fprintf (stderr, "-q     -- enable QUIET mode\n");
-	fprintf (stderr, "-r <n> -- updates refresh (n/100)%% of the\n");
-	fprintf (stderr, "          data set\n");
+	fprintf (stderr, "-r <n> -- updates refresh (n/100)%% of the data set\n");
 	fprintf (stderr, "-s <n> -- set Scale Factor (SF) to  <n> \n");
 	fprintf (stderr, "-S <n> -- build the <n>th step of the data/update set\n");
 
