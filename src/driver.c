@@ -575,7 +575,7 @@ usage (void)
 	fprintf (stderr, "%s\n%s\n\t%s\n%s %s\n\n",
 		"USAGE:",
 		"dbgen [-{vfFD}] [-O {fhmsv}][-T {pcsdla}]",
-		"[-s <scale>][-C <procs>][-S <step>]",
+		"[-s <scale>][-C <chunks>][-S <step>]",
 		"dbgen [-v] [-O {dfhmr}] [-s <scale>]",
 		"[-U <updates>] [-r <percent>]");
 
@@ -583,13 +583,13 @@ usage (void)
 	fprintf (stderr, "%s\n%s\n\t%s\n%s %s\n\n",
 		"USAGE:",
 		"dbgen [-{vfFD}] [-O {fhmsv}][-T {pcsoPSOL}]",
-		"[-s <scale>][-C <procs>][-S <step>]",
+		"[-s <scale>][-C <chunks>][-S <step>]",
 		"dbgen [-v] [-O {dfhmr}] [-s <scale>]",
 		"[-U <updates>] [-r <percent>]");
 #endif
 	fprintf (stderr, "-b <s> -- load distributions from file <s> (default: " DIST_DFLT ")\n");
-	fprintf (stderr, "-C <n> -- use <n> processes to generate data\n");
-	fprintf (stderr, "          [Under DOS, must be used with -S]\n");
+	fprintf (stderr, "-C <n> -- separate data set into <n> chunks\n");
+	fprintf (stderr, "          (requires -S; default: 1; uses <n> child processes)\n");
 	fprintf (stderr, "-D     -- do database load in line\n");
 	fprintf (stderr, "-d <n> -- split deletes between <n> files\n");
 	fprintf (stderr, "-f     -- force. Overwrite existing files\n");
